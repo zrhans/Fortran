@@ -7,5 +7,5 @@ Installing GNU 4.4 of C, C++ and gfortran for CentOS 5
 Something I forget the package names of these essential compilers for  CentOS 5
 
 `#yum install gcc44 gcc44-c++ gcc44-gfortran`
-
+Caso tenha problemas, tente `#yum install gcc gcc-c++ gcc-gfortran`
 ---
