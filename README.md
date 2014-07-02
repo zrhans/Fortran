@@ -4,7 +4,7 @@ FORTRAN
 Repositório com exemplos de códigos em FORTRAN
 
 Este Repositório contém, em pastas, os códigos fonte criados pelos alunos
-da disciplina FSC1004 - Computação Básica para Físia FORTRAN.
+da disciplina FSC1004 - Computação Básica para Física - FORTRAN.
 
 ##### Estrutura de Pastas: 
 
