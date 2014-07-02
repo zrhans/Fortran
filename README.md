@@ -1,4 +1,4 @@
 FORTRAN95
 =========
 
-Repositório com exemplos de códigos em FORTRAN90
+Repositório com exemplos de códigos em FORTRAN95
