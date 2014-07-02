@@ -10,6 +10,7 @@ Estrutura de Pastas:
 
 FSC1004-YYYY-S__matricula/
 
+    FSC1004-YYYY-S__matricula/
             |
             |-> aulas/
             |-> atividades/
