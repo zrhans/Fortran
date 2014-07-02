@@ -8,10 +8,12 @@ da disciplina FSC1004 - Computação Básica para Físia FORTRAN.
 
 Estrutura de Pastas:
 
-FSC1004-YYYY-S__matricula/
-
     FSC1004-YYYY-S__matricula/
-            |
-            |-> aulas/
-            |-> atividades/
-            |-> etc/
+    │
+    ├── aulas/
+    │    
+    ├── atividades/
+    │    
+    └── etc/
+
+
