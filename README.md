@@ -25,7 +25,7 @@ Use o secript `publica` digitando no terminal:
 ./publica
 ```
 
-Conteúdo do arquivo (script shell) `publicah`
+Conteúdo do arquivo (script shell) `publica`
 
 ```bash
 #!/bin/bash
