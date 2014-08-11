@@ -19,13 +19,13 @@ da disciplina FSC1004 - Computação Básica para Física - FORTRAN.
 ===============
  ## Automatizando a publicação no Repositório
 
-Use o secript `push` digitando no terminal:
+Use o secript `publica` digitando no terminal:
 
 ```bash
-./push
+./publica
 ```
 
-Conteúdo do arquivo (script shell) `push`
+Conteúdo do arquivo (script shell) `publicah`
 
 ```bash
 #!/bin/bash
