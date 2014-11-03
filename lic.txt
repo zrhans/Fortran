@@ -1,1 +1,4 @@
-lic
+Índice pluviométrico - Medido em milímetros, é o somatório da precipitação num determinado local durante um periodo de tempo estabelecido.
+Regime pluviométrico - Consiste basicamente na distribuição das chuvas durante os 12 meses do ano. 
+Tanto o regime quanto o índice pluviométrico são representados nos climogramas por colunas mensais. 
+Pela análise das colunas é possivel caracterizar o regime e, consequentemente, o índice pluviométrico.

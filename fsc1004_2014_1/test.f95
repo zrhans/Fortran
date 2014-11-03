@@ -5,6 +5,6 @@ integer :: i
  
 i=3
  
-print *,"Hello the value of i:",i
+print *,"Ola o valor de  i:",i
  
 end program testingist

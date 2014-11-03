@@ -2,9 +2,23 @@
     "run": {
         "@path": "/.c9/runners",
         "configs": {
-            "json()": {},
+            "json()": {
+                "test.f95": {
+                    "runner": "My Runner",
+                    "command": "README.md",
+                    "debug": true,
+                    "name": "test.f95"
+                },
+                "My Runner.run": {
+                    "runner": "My Runner",
+                    "command": "",
+                    "debug": true,
+                    "name": "My Runner.run"
+                }
+            },
             "@inited": "true"
-        }
+        },
+        "@runner": "Apache httpd (PHP, HTML)"
     },
     "share": {
         "@preview": false,
