@@ -3,6 +3,7 @@ clear
 echo ''
 echo '----------------------------------------------'
 echo '   SINCRONIZANDO ARQUIVOS COM O REPOSITORIO   '
+echo '   user.name: zrhans'
 echo '----------------------------------------------'
 echo ''
 git config --global user.email 'zrhans@gmail.com'
