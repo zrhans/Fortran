@@ -1,0 +1,18 @@
+#!/bin/bash
+clear
+echo ''
+echo '----------------------------------------------'
+echo '   SINCRONIZANDO ARQUIVOS COM O REPOSITORIO   '
+echo '----------------------------------------------'
+echo ''
+git config --global user.email 'zrhans@gmail.com'
+git config --global user.name 'zrhans'
+git pull
+git add -A && git commit -m 'atualizado'
+git push origin master
+clear
+echo ''
+echo '----------------------------------------------'
+echo '   Arquivos sincronizados com  repostorio     '
+echo '----------------------------------------------'
+echo ''
