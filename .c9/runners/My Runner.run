@@ -1,8 +1,0 @@
-// Create a custom Cloud9 runner - similar to the Sublime build system
-// For more information see http://docs.c9.io:8080/#!/api/run-method-run
-{
-    "cmd" : ["gfortran", "$file", "$args"],
-    "info" : "Started $project_path$file_name",
-    "env" : {},
-    "selector" : "source.ext"
-}
