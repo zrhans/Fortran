@@ -1,0 +1,15 @@
+'reinit'
+'open uwnd.ctl'
+ti = 1
+tf = 7
+while(ti<=tf)
+'set t 'ti
+'set gxout shaded'
+'d teta'
+'set gxout vector'
+'d u;w'
+'run /usr/local/lib/grads/cbarn.gs'
+pull k
+ti = ti+1
+endwhile
+

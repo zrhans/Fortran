@@ -1,0 +1,855 @@
+program FLUXO_CRUZ_ALTA_2010_T1
+!-----------------------------------------------------------------------------------------+
+! Programador: Claudio A.Teichrieb - LUMET/UFSM - 18/05/2010 - VERSAO: 03/08/2010	      !
+!																					      !                                                                                      
+! Programa para calcular fluxos turbulentos                                               !
+!                                                                                         !
+! A matriz dados deve ser dimensionada de acordo com as colunas do arquivo de entrada     !
+!                                                                                         !
+! bloco              = Tamanho da serie temporal em cada laco    (3 min, por exemplo)     !
+! t_lines            = Total de linhas de dados brutos                                    !
+! nf	             = Numero de colunas do arquivo de dados de entrada (brutos)          !
+! step               = Avanco do laco de analise (a cada 3 min)                           !
+! line_b e line_t    = Limites inferior e superior da janela (BLOCO) na serie t_lines     !
+!                                                                                         !
+! 5400 = 30 min;  540 = 3 min <-- taxa de  3 Hz                                           !
+!18000 = 30 min; 1800 = 3 min <-- taxa de 10 Hz 									      !
+!                                          											      !
+!-----------------------------------------------------------------------------------------+
+implicit none           
+integer, parameter :: t_lines=880201 ! dj=325, UMA Hora=36000 e UM Dia=864000          ##
+    ! Para média movel passo 3 min (bloco) usar = 880201 (480 linhas c/ bloco 30 min)
+    ! Isso quer dizer que os arquivos de entrada devem ser maiores que um dia
+	! Para medias de 5 minutos, usar = 864001 (uma linha a mais para fechar o loop)
+integer, parameter :: t_linesflux=480  !Numero de linhas do arquivo de saida fluxos    ##
+integer, parameter :: bloco=18000   ! 18000 = 30 minutos 							   ##
+integer, parameter :: NF=22         ! NF=22 Torre1, NF=16 Torre2 NF=25 Intercomparacao ##
+integer, parameter :: NFflux=40     ! Vai depender do numero de variaveis de saida 	   ##
+integer :: STEP=1800                ! 1800 = 3 minuto , 3000 = 5 min				   ##
+
+real, parameter :: massa_oxigen=15.9994,massa_carbon=12.0111  ! massa_hidrogen=1,0080
+real, parameter :: RHO=1.184,CP=1005,LV=2500000		        ! lv=2257000 J/kg a  100 graus
+		!  rho ar seco em Kg/m^3 a 25 graus C, CP em J/kg/K , lv=2500000 J/kg a zero graus
+real, parameter :: mmh2o=0.000018,mmco2=0.000044,mmarseco=28.964,mmvapor=18.015 ! g/mol
+!!++++++++++++++++++++++++++++++++++! Mudar de acordo com o local e dia escolhido++++++++++
+integer, parameter :: hsm=720 !, dj=331 ! 12 horas tem 720 minutos 
+real, parameter :: lat=-0.499227,pi=3.141592654 !em radianos !lat=-28.6036,lon=53.6736
+real, parameter :: cfh=34.6944	! em minutos !cfh=0.578166
+real :: Fa,delg,delr,Ahr,Ahg,Tdd,deltat,Mdl,NS,PS
+!!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+integer, dimension(1:t_lines) :: serie,hh=0,mm=0   !SPLIT_HHMM
+character(len=9) :: cnsc,cnsd,cpsc,cpsd  
+real :: nsc,nsd,psc,psd
+integer :: ins,ips
+!!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++      
+    ! Matrizes no f90 MTX(colunas,linhas)                
+real, dimension(1:bloco,1:3) :: Vento_b1  ! vento bruto	sensor1			
+real, dimension(1:t_lines,1:nf) :: dados
+real, dimension(1:t_linesflux,1:NFflux) :: dadosflux
+real, dimension(1:bloco) :: u1_turb,v1_turb,w1_turb,cu1_turb,cv1_turb,cw1_turb
+real, dimension(1:bloco) :: t1_turb,q1_turb,c1_turb,ct1_turb,cq1_turb,cc1_turb
+real, dimension(1:bloco) :: U1R1,V1R1,W1R1,U1R2,V1R2,W1R2,U1R3,V1R3,W1R3
+real :: AT11,AT12,AT13,WIND11D, WIND12D,WIND13D,VentoBruto
+real :: U1MR1,U1MR2,U1MR3,V1MR1,V1MR2,V1MR3,W1MR1,W1MR2,W1MR3
+real :: V1W1MR2,V1MQR2,W1MQR2,U1MRAW,V1MRAW,W1MRAW
+real, dimension(1:12) :: soma,medio
+real :: ustar1,t1,ect1
+real :: timedjdeci,time,time_in,timehhmm,timedecimal
+real :: mediaq1, mediac1,mediat1
+real :: sigmaq1,sigmac1,sigmaw,sigmau,sigmav,sigmat
+real :: somatq1,somatc1
+real :: somabq1,somabc1
+
+real :: newsigmaq1,newsigmac1
+real, dimension(1:bloco) :: newq1_turb,newc1_turb
+
+integer :: trocaq1,trocac1      	!Numero de Dados substituidos pela média
+real :: p_trocaq1,p_trocac1,tot_lines
+
+real, dimension(1:bloco) :: w1u1,w1v1,w1t1,w1q1,w1c1 !latente,sensivel,wc, wc_mg_kg
+real :: cw1u1,cw1v1,cw1t1,cw1q1,cw1c1,ccw1c1,latente1,sensivel1
+real :: wco2webb_cor1,wco2webb_le1,wco2webb_h1,wco2_mg,wco2_gcd
+
+integer :: i,j,k,l,p,r,s
+integer :: line_b,line_t,line_s
+
+character :: ENTRADA*23
+character :: SAIDA_STATIS*30
+character :: SAIDA_NEE*27
+character :: SAIDA_GERALTROCA*34
+character :: SAIDA_PORC_TROCA*34
+!----------------------------------------------------------------------------------------- 
+real :: NEE_NOTURNO, NEE_DIURNO 
+real ::	somaNEE_N, somaNEE_D
+real :: MMMHHH, MMM, HHH, HHMMout
+real :: Pres,NET,RG,PAR,FLXsolo,Tsolo
+real :: e,rm,es,RH,Td,Ro_h2o,Ro_ar,SH,shceop !,MOL
+						 !TROCAR DIA     !* ! TORRE 1
+character(len = 3) ::     djc     !='334'!* ! Para concatenar os nomes dos arquivos	!	##
+integer            ::     diaj,dj != 334 !*						                    !   ##
+						 !***************!*
+
+do diaj=017,017   ! inicio do laço que intera sobre uma sequencia de DJ
+   write(djc,'(I3,I3)')diaj
+     dj = diaj
+   print*,'--------------------------------------------------------------'
+   print*,' Calculando dia: ',djc
+   print*, ''
+   print*,'--------------------------------------------------------------'
+! enddo 
+!  stop
+! do j=1,1
+
+!=========================================================================================!
+!=========================================================================================!
+!ESCOLHA DO NOME DO ARQUIVO DE ENTRADA E SAIDA, OBEDECENDO O NUMERO DE CARACTERES	   
+
+ENTRADA	          =            'CSV_CA_100_2010_'//djc//'.dat'			!    11     !   ##
+SAIDA_STATIS      =     'STATIS_CSV_CA_100_2010_'//djc//'.dat'		    !    13     !   ##
+SAIDA_NEE         =        'NEE_CSV_CA_100_2010_'//djc//'.dat'			!	 14  *  !   ##                                  
+SAIDA_GERALTROCA  = 'GERALTROCA_CSV_CA_100_2010_'//djc//'.dat'			!	 17	    !   ##
+SAIDA_PORC_TROCA  = 'PORC_TROCA_CSV_CA_100_2010_'//djc//'.dat'			!	 18	    !   ##
+!=========================================================================================!
+!=========================================================================================!
+ 
+OPEN(UNIT = 11,FILE = ENTRADA,STATUS = 'UNKNOWN')
+OPEN(UNIT = 13,FILE = SAIDA_STATIS)          ! É reaberto no final do programa
+!OPEN(UNIT = 14,FILE = SAIDA_NEE)            ! É aberto no final do programa	 *
+OPEN(UNIT = 17,FILE = SAIDA_GERALTROCA)
+OPEN(UNIT = 18,FILE = SAIDA_PORC_TROCA)
+
+! LER O ARQUIVO DE ENTRADA
+
+dados(:,:)=0.;					
+
+print*, 'Lendo o Arquivo...'
+
+do i=1,t_lines
+  READ(11,*,end=10)(dados(i,j),j=1,NF)
+enddo
+
+print *, "Erro lendo a linha: ",t_lines
+
+10 continue 
+
+print *,'>>> Arquivo de dados carregado com sucesso.'
+
+print *,"    u1      v1      w1	    " 
+
+do i=1,10
+  print '(9f8.3)',Dados(i,9),(-1*(Dados(i,8))),Dados(i,10)
+enddo 
+ print*,"==============================================================="
+ print*,"dj =",dj, "  >> T0RRE 1 <<"
+ print*,"==============================================================="
+! *****************************************************************************************
+! CALCULO DO NASCER E POR DO SOL,BEM COMO A DURACAO DO DIA, DECLINAÇÃO SOLAR, PARA O FUTURO
+! CALCULO DO SOMATORIO DO NEE NOTURNO E DIURNO
+! (VAREJÃO) CALCULO DA DECLINACAO SOLAR(del) SEGUNDO WON(1977),G.W.ROBERTSON E D.A.RUSSELO
+! F = fração angular do ano correspondente à data escolhida (em graus)
+! equação grosseira para del=23,45*sen(360*(284+dj)/365) !nao usei
+! del é fornecido em graus e decimos (0.1º = 6')
+! lat = 28.6036 , lon = 53.6736
+
+! Zerando as variaveis 
+  Fa=0.;delg=0.;delr=0.;Ahr=0.;Ahg=0.;Tdd=0.;deltat=0.;Mdl=0.;NS=0.;PS=0.;
+
+  Fa = ( ( 0.986301369 * dj)/180 ) * pi	! Fracao angular(Fa)--> angulo em radianos
+										! F = 360 * (dj/365)  
+  delg = 0.3964 + 3.631*sin(Fa) - 22.97*cos(Fa) + 0.03838*sin(2*Fa) - 0.3885*cos(2*Fa) &
+   + 0.07659*sin(3*Fa) - 0.1587*cos(3*Fa) - 0.01021*cos(4*Fa)!declinacao do sol->em graus
+
+  delr = (delg/180) * pi	! converte em radianos
+
+  Ahr =  acos(-1*tan(lat) * tan(delr)) ! Angulo horario (Ahr) --> em radianos
+
+  Ahg	= (Ahr*180) / pi
+! CALCULO DO FOTOPERIODO (Tdd), OU SEJA, O TEMPO DE DURAÇÃO DO DIA
+! CORRECAO DE LIST,1971 O,83 graus na equação abaixo  2/5 = 0.13333333
+  Tdd = 2*(0.8333 + Ahg)/15 !tempo de duracao do dia (Tdd) é o fotoperiodo --> em horas
+! A equação do tempo deltat fornece a saida em minutos
+! Won(1977) menciona a equação seguinte, adotada por G.W. Robertson e D.A.Russelo, 
+! satisfatória para propósitos praticos
+  deltat = 0.002733 - 7.343 * sin(Fa) + 0.5519 * cos(Fa) - 9.47 * sin(2*Fa) &
+   - 3.03 *cos(2*Fa) + 0.3289*sin(3*Fa) - 0.07581*cos(3*Fa) - 0.1935*sin(4*Fa) &
+    - 0.1245*cos(4*Fa) !Equacao horaria --> em minutos
+! Correcao do fuso horário (cfh) vai ser posto como parametro (essa correção será positiva,
+! pois estamos a oeste do meridiano central)
+! clon = longitude local - 45, onde o 45 é meridiano do fuso desde local (cruz alta)
+! clon = 8.6736, com regra de tres 15graus ----------- 60min
+!								   8.6736  -----------  x = 34,6944 -> 34 min 41 s 39,84 ms
+! cfh = 34,6944
+! hsv = hsm + cfh + deltat , assim usando para o meio dia(12 horas) 
+! Mdl = 12 + 34,6944 + deltat
+
+  Mdl = (hsm + cfh + deltat)/60  ! meio dia local --> em minutos	 Mdl = hsv
+
+  NS = Mdl - Tdd/2	!Nascer do Sol
+
+  PS = Mdl + Tdd/2	!Por do Sol
+
+  Print*,'NS=',NS
+  Print*,'PS=',PS  
+! ***************************************************************************************** 
+! *****************************************************************************************                             
+  serie(:)=dados(:,4)
+  
+call SPLIT_HHMM(Serie,hh,mm,SIZE(SERIE))
+
+do i=1,t_lines 
+  nsc = NS										  !nsc= nascer do sol calculado
+  nsd = hh(i) + (mm(i)/60.) + (dados(i,5)/3600.)  !nsd= nascer do sol dados
+  write(cnsc,'(F9.5,F9.5)')nsc					  !cnsc= caracter nascer do sol calculado
+  write(cnsd,'(F9.5,F9.5)')nsd					  !cnsd= caracter nascer do sol dados
+  read(cnsc,'(F9.5,F9.5)')nsc
+  read(cnsd,'(F9.5,F9.5)')nsd
+  
+  if ( (nsc.GE.(nsd - 0.000015)).AND.(nsc.LE.(nsd + 0.000015)) ) then
+    nsd = nsc
+  end if
+  
+  if ( nsc == nsd ) then
+    print*,"###############################################################"
+    print*,"Achei"
+    print*,"###############################################################"
+    print*,"       i,         Serie(i),     HHMM(i),    hh(i),     mm(i)   "
+    print*,i,serie(i),hh(i),mm(i),dados(i,5)
+    print*,"       NS              NewNS     "
+    print*,NS,hh(i)+(mm(i)/60.)+(dados(i,5)/3600.) 
+    print*,"       nsc             nsd  "
+    print*,nsc,nsd
+  ins=i
+  end if
+end do
+ 
+ print*,"==============================================================="
+ print*,"ins",ins
+ print*,"==============================================================="
+! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ do i=1,t_lines 
+  psc = PS											 !psc= por do sol calculado
+  psd = hh(i) + (mm(i)/60.) + ( dados(i,5)/3600. )	 !psd= por do sol dados
+  write(cpsc,'(F9.5,F9.5)')psc						 !cpsc= caracter por do sol calculado
+  write(cpsd,'(F9.5,F9.5)')psd						 !cpsd= caracter por do sol dados
+  read(cpsc,'(F9.5,F9.5)')psc
+  read(cpsd,'(F9.5,F9.5)')psd
+  
+  if ( (psc.GE.(psd - 0.000012)).AND.(psc.LE.(psd + 0.000012)) ) then
+    psd = psc
+  end if
+
+  if ( psc == psd ) then
+    print*,"###############################################################"
+    print*,"Tambem Achei"
+    print*,"###############################################################"
+    print*,"       i,         Serie(i),     HHMM(i),    hh(i),     mm(i)   "
+    print*,i,serie(i),hh(i),mm(i),dados(i,5)
+    print*,"       PS              NewPS     "
+    print*,PS,hh(i)+(mm(i)/60.)+(dados(i,5)/3600.) 
+    print*,"       psc             psd  "
+    print*,psc,psd
+  ips=i
+  end if
+end do
+
+ print*,"==============================================================="
+ print*,"ips",ips
+ print*,"==============================================================="
+!******************************************************************************************
+
+ trocaq1 = 0  
+ trocac1 = 0
+
+!ESTE 'do' REALIZA AS ANALISES EM TODO O CONJUNTO DE DADOS
+
+line_b=1; line_t=bloco; line_s=STEP;
+do while (line_t.le.t_lines)
+
+!ZERAND0 AS VARIAVEIS E VETORES
+
+  time=0
+  medio(:)=0.;  soma(:)=0.
+
+  u1_turb(:)=0.; v1_turb(:)=0.; w1_turb(:)=0.; 
+  t1_turb(:)=0.; q1_turb(:)=0.; c1_turb(:)=0.;
+  
+  cu1_turb(:)=0.; cv1_turb(:)=0.; cw1_turb(:)=0.; 
+  ct1_turb(:)=0.; cq1_turb(:)=0.; cc1_turb(:)=0.;
+
+  w1u1(:)=0.;  w1v1(:)=0.;  w1t1(:)=0.; w1q1(:)=0.; w1c1(:)=0.; 
+   
+  ustar1=0.; T1=0.;  sensivel1=0.;  latente1=0.;              
+          
+  AT11=0.; AT12=0.; AT13=0.;
+   
+  U1MRAW=0.; V1MRAW=0.; W1MRAW=0.;
+   
+  u1r1(:)=0.;   u1r2(:)=0.;   u1r3(:)=0.; 
+  v1r1(:)=0.;   v1r2(:)=0.;   v1r3(:)=0.; 
+  w1r1(:)=0.;   w1r2(:)=0.;   w1r3(:)=0.;
+
+  u1mr1=0.;   u1mr2=0.;   u1mr3=0.; 
+  v1mr1=0.;   v1mr2=0.;   v1mr3=0.; 
+  w1mr1=0.;   w1mr2=0.;   w1mr3=0.;
+   
+  V1W1MR2=0.;   V1MQR2=0.;    W1MQR2=0.;
+  
+  Vento_b1(:,:) = 0.;
+  
+  mediaq1=0.; mediac1=0.; mediat1=0.;
+  sigmaq1=0.; sigmac1=0.;
+
+  somatq1=0.;somatc1=0.;
+  somabq1=0.;somabc1=0.;
+   
+  sigmaw=0.; sigmau=0.; sigmav=0.; sigmat=0.;
+  
+  wco2webb_cor1=0.;wco2webb_le1=0.;wco2webb_h1=0.;
+ 						
+! COMPONENTES DO VENTO
+
+! Se o Anemometro sonico apontado para o Norte
+! Vento_b(:,1) = dados(:,8); Vento_b(:,2) = dados(:,9); Vento_b(:,3) = dados(:,10)
+
+  Vento_b1(:,1) = dados(line_b:line_t,9)
+  Vento_b1(:,2) = (-1 * (dados(line_b:line_t,8)))
+  Vento_b1(:,3) = dados(line_b:line_t,10)
+
+! O anemometro sonico esta apontado para o leste, assim u = -v e v = u
+! Vento_b(:,1)=(-1.0*(dados(:,9)));Vento_b(:,2)=dados(:,8);Vento_b(:,3)=dados(:,10)
+
+! CALCULA COMPONENTES TURBULENTAS nao corrigidas
+!!print*,"! CALCULA COMPONENTES TURBULENTAS nao corrigidas"
+
+   !u_turb(:) = dados(:,8) - ( sum( dados(:,8) ) / bloco )	!CSAT norte
+   !v_turb(:) = dados(:,9) - ( sum( dados(:,9) ) / bloco )
+
+   !! CSAT leste
+   !! u_turb(:) = (-1.0 * (dados(:,9))) - ( sum(-1.0 * (dados(:,9)) ) / bloco )
+   !! v_turb(:) = dados(:,8) - ( sum( dados(:,8) ) / bloco )
+  
+   !w_turb(:) = dados(:,10) - ( sum( dados(:,10) ) / bloco )
+   !t_turb(:) = dados(:,11) - ( sum( dados(:,11) ) / bloco )
+   !q_turb(:) = dados(:,14) - ( sum( dados(:,14) ) / bloco )
+   !c_turb(:) = dados(:,13) - ( sum( dados(:,13) ) / bloco )
+
+! Media movel 
+  u1_turb(:) = dados(line_b:line_t,9) - ( sum( dados(line_b:line_t,9) ) / bloco )
+  v1_turb(:) = (-1*(dados(line_b:line_t,8))) - (sum((-1*( dados(line_b:line_t,8))))/bloco )
+  w1_turb(:) = dados(line_b:line_t,10) - ( sum( dados(line_b:line_t,10) ) / bloco )
+  t1_turb(:) = dados(line_b:line_t,11) - ( sum( dados(line_b:line_t,11) ) / bloco )
+  q1_turb(:) = dados(line_b:line_t,14) - ( sum( dados(line_b:line_t,14) ) / bloco )
+  c1_turb(:) = dados(line_b:line_t,13) - ( sum( dados(line_b:line_t,13) ) / bloco )
+
+ 
+ ! CALCULO DA MEDIA (MEDIAq, MEDIAc) E DESVIO PADRAO (SIGMAq, SIGMAc) 
+ ! DEPOIS acrescentar as demais variaveis
+
+  mediaq1 = (sum (dados(line_b:line_t,14))/bloco)
+  mediac1 = (sum (dados(line_b:line_t,13))/bloco)
+  mediat1 = (sum (dados(line_b:line_t,11))/bloco)
+
+  sigmaq1 = sqrt (sum (q1_turb(:)**2)/bloco)
+  sigmac1 = sqrt (sum (c1_turb(:)**2)/bloco)
+
+ ! REMOVER SPIKES (outliers ou dados discrepantes) OU MELHOR SUBSTITUI
+ 
+  somatq1 = mediaq1 + (3*sigmaq1)
+  somabq1 = mediaq1 - (3*sigmaq1)
+
+  somatc1 = mediac1 + (3*sigmac1)
+  somabc1 = mediac1 - (3*sigmac1)
+
+  ! CONTADORES DO NUMERO DE DADOS TROCADOS PELA MÉDIA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   do k=line_b,line_s
+    if ( dados(k,14).GE.somatq1.OR.dados(k,14).LE.somabq1.OR.dados(k,14).LE. & 
+	   (mediaq1-(mediaq1/15)) ) & !.OR.dados(k,19).GE.(mediaq1+(mediaq1/15)) ) &
+	 trocaq1 = trocaq1 + 1
+   end do
+	
+   do l=line_b,line_s
+    if ( dados(l,13).GE.somatc1.OR.dados(l,13).LE.somabc1.OR.dados(l,13).LE. & 
+	   (mediac1-(mediac1/20)).OR.dados(l,13).GE.(mediac1+(mediac1/15)) ) &
+	 trocac1 = trocac1 + 1
+   end do
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !TROCA DOS DADOS QUE SATISFAZEM A CONDIÇÃO (PELA MÉDIA)
+
+   do k=line_b,line_t
+    if ( dados(k,14).GE.somatq1.OR.dados(k,14).LE.somabq1.OR.dados(k,14).LE. & 
+	   (mediaq1-(mediaq1/15)) ) & !.OR.dados(k,19).GE.(mediaq1+(mediaq1/35)) ) &
+	 dados(k,14) = mediaq1
+   end do
+  
+   do l=line_b,line_t
+    if ( dados(l,13).ge.somatc1.or.dados(l,13).le.somabc1.OR.dados(l,13).LE. & 
+	   (mediac1-(mediac1/20)).OR.dados(l,13).GE.(mediac1+(mediac1/15)) ) &
+	 dados(l,13) = mediac1
+   end do
+  
+! ESCREVENDO O MODULO DO VENTO NOS REFERENCIAIS
+!!  print*,'vou escrever no arquivo 15 .ger'
+
+!! WRITE(15,*)'----'
+!! WRITE(15,*)'Bloco de dados : ',bloco
+!! WRITE(15,*)'----'
+
+! CALCULANDO <U,V,W> raw
+ 
+  U1MRAW=(sum(Vento_b1(:,1))/bloco)
+  V1MRAW=(sum(Vento_b1(:,2))/bloco)
+  W1MRAW=(sum(Vento_b1(:,3))/bloco)
+
+  VentoBruto = sqrt( U1MRAW**2 + V1MRAW**2 + W1MRAW**2 ) 
+  
+!! WRITE(15,*)'Modulo do Vento    BRUTO      : ',sqrt( U1MRAW**2 + V1MRAW**2 + W1MRAW**2 )
+     
+! ROTACOES 3D
+!
+! OBS: Efetuando ROTACAO 3D em (TBE) e em (COR) 
+!
+! =========================================================================================
+! AS COMPONENTES u E v SERAO ROTADAS DE MODO A COINCIDIR u COM A DIRECAO DO VENTO MEDIO
+! E v COM A DIRECAO TRANSVERSAL. VER KAIMAL E FINNIGAN (1994) PG 234
+!
+! VARIAVEIS:
+! ==========
+!     U1R1<- COMPONENTE U DO VENTO NO NIVEL 1 - PRIMEIRA ROTACAO
+!     V1R1<- COMPONENTE V DO VENTO NO NIVEL 1 - PRIMEIRA ROTACAO
+!     W1R1<- COMPONENTE W DO VENTO NO NIVEL 1 - PRIMEIRA ROTACAO
+
+!     U1R2<- COMPONENTE U DO VENTO NO NIVEL 1 - SEGUNDA ROTACAO
+!     V1R2<- COMPONENTE V DO VENTO NO NIVEL 1 - SEGUNDA ROTACAO
+!     W1R3<- COMPONENTE W DO VENTO NO NIVEL 1 - SEGUNDA ROTACAO
+
+!     U1R3<- COMPONENTE U DO VENTO NO NIVEL 1 - TERCEIRA ROTACAO
+!     V1R3<- COMPONENTE V DO VENTO NO NIVEL 1 - TERCEIRA ROTACAO
+!     W1R3<- COMPONENTE W DO VENTO NO NIVEL 1 - TERCEIRA ROTACAO
+
+!     Ux1SRy<- S = SOMA  DA COMPONENTE x DO VENTO NO NIVEL 1 - y ROTACAO
+!     Ux1MRy<- M = MEDIA DA COMPONENTE x DO VENTO NO NIVEL 1 - y ROTACAO
+! =========================================================================================
+
+! CALCULA O PRIMEIRO ANGULO
+! print*,'Rotacoes. 01'
+! ANG1=ARCTAN(<U>/<V>)
+
+      AT11=ATAN(V1MRAW/U1MRAW) !!V1/U1
+	  
+ ! EFETUA A PRIMEIRA ROTACAO 
+
+      U1R1( : ) = Vento_b1(:,1) * cos(AT11) + Vento_b1(:,2) * sin(AT11)
+      V1R1( : ) = Vento_b1(:,2) * cos(AT11) - Vento_b1(:,1) * sin(AT11)
+      W1R1( : ) = Vento_b1(:,3)
+	  
+! RECALCULA O  NOVO VALOR MEDIO DE u,v E w
+
+      U1MR1 = ( sum( U1R1(:) ) / bloco );
+      V1MR1 = ( sum( V1R1(:) ) / bloco );
+      W1MR1 = ( sum( W1R1(:) ) / bloco );
+	
+!!	  WRITE(15,*)'====================================' 
+!!	  WRITE(15,*)'ANGULO DA PRIMEIRA ROTACAO   (RAD) =',AT1
+!!	  WRITE(15,*)'VELOCIDADES MEDIAS APOS A ROTACAO 1:'
+!!	  WRITE(15,812)
+!! 812  FORMAT(3X,'<U3D>',5X,'<V3D>',5X,'<W3D>')
+!!      WRITE(15,2873)U1MR1,V1MR1,W1MR1
+      
+!! 2873 FORMAT(1X,F5.2,3X,F5.2,3X,F5.2)
+
+! RECALCULA THE WIND SPEED
+
+      WIND11D = SQRT( U1MR1**2 + V1MR1**2 )
+     
+!!    WRITE(15,*) 
+!!    WRITE(15,*)'VENTO HORIZONTAL APOS ROTACAO 1  (m/s) =',WIND1D
+!!    WRITE(15,*)'------------------------------------'
+
+! CALCULA O SEGUNDO ANGULO 
+! print*,'Rotacoes. 02'
+! ANG2=ARCTAN(<w>/<u>) rotados anteriormente
+	  AT12 = ATAN( W1MR1 / U1MR1 ) 
+	       
+! EFETUA A SEGUNDA ROTACAO 
+
+      U1R2(:) = U1R1(:) * cos(AT12) + W1R1(:) * sin(AT12)
+      V1R2(:) = V1R1(:)
+      W1R2(:) = W1R1(:) * cos(AT12) - U1R1(:) * sin(AT12)        
+
+! RECALCULA OS  NOVOS VALORES MEDIO DE u,v E w
+!Print*,'uvw medios apos 2 rotacoes'
+      U1MR2 = ( sum( U1R2( : ) ) / bloco );
+      V1MR2 = ( sum( V1R2( : ) ) / bloco );
+      W1MR2 = ( sum( W1R2( : ) ) / bloco );
+
+	 !print *, "lendo u: ", U1MR2
+	 !print *, "lendo v: ", V1MR2
+	 !print *, "lendo w: ", W1MR2
+	   
+!!	  WRITE(15,*)'ANGULO DA SEGUNDA ROTACAO   (RAD) =',AT2 
+!!      WRITE(15,*)'VELOCIDADES MEDIAS APOS A ROTACAO 2:' 
+!!      WRITE(15,815)
+!! 815  FORMAT(3X,'<U3D>',5X,'<V3D>',5X,'<W3D>')
+!!      WRITE(15,2875)U1MR2,V1MR2,W1MR2
+
+!! 2875 FORMAT(1X,F5.2,3X,F5.2,3X,F5.2)
+
+! RECALCULA THE WIND SPEED
+
+      WIND12D = SQRT( U1MR2**2 + V1MR2**2 )
+
+!!      WRITE(15,*) 
+!!      WRITE(15,*)'VENTO HORIZONTAL APOS ROTACAO 2  (m/s) =',WIND2D
+!!      WRITE(15,*)'------------------------------------'
+  
+! Print*,'Feito'
+
+! CALCULA AS NOVAS COMPONENTES TURBULENTAS
+! CALCULA O TERCEIRO ANGULO (utilizando fluxos vw e v² e w²)
+!
+!print*,'Recalculando flux for 3dr angulo apos 2 rotacoes'
+
+!     V1W1MR2 = ( sum( V1R2(:) * W1R2(:) ) / bloco ); ! Medios
+!     V1MQR2 = ( sum( V1R2(:)**2 ) / bloco );         ! Medio
+!     W1MQR2 = ( sum( W1R2(:)**2 ) / bloco );         ! Medios
+
+      V1W1MR2 = ( sum( ( V1R2(:) - V1MR2 ) * ( W1R2(:) - W1MR2 ) ) / bloco ); !Fluxo Medios
+      V1MQR2 = ( sum( ( V1R2(:) - V1MR2 )**2 ) / bloco );         ! vlinha²
+      W1MQR2 = ( sum( ( W1R2(:) - W1MR2 )**2 ) / bloco );         ! wlinha²      
+
+!Print*,'Feito'
+
+! CALCULA O TERCEIRO ANGULO DE ACORDO COM KAIMAL(1994) pg.239
+! print*,'Rotacao. 03'
+      AT13 = 0.5 * ATAN( 2 * V1W1MR2 / ( V1MQR2 - W1MQR2 ) )  
+	  
+! EFETUA A ROTACAO FINAL
+
+      U1R3(:) = U1R2(:)
+      V1R3(:) = V1R2(:) * cos(AT13) + W1R2(:) * sin(AT13)
+      W1R3(:) = W1R2(:) * cos(AT13) - V1R2(:) * sin(AT13)
+
+! RECALCULA OS  NOVOS VALORES MEDIO DE u,v E w
+
+      U1MR3 = ( sum( U1R3( : ) ) / bloco )
+      V1MR3 = ( sum( V1R3( : ) ) / bloco )
+      W1MR3 = ( sum( W1R3( : ) ) / bloco )
+
+!!	    WRITE(15,*)
+!!      WRITE(15,*)'ANGULO DA TERCEIRA ROTACAO   (RAD) =',AT3
+!!      WRITE(15,*)'VELOCIDADES MEDIAS APOS A ROTACAO 3:'
+!!      WRITE(15,800)
+!! 800  FORMAT(3X,'<U3D>',5X,'<V3D>',5X,'<W3D>')
+!!      WRITE(15,2876)U1MR3,V1MR3,W1MR3
+      
+!! 2876 FORMAT(1X,F5.2,3X,F5.2,3X,F5.2)
+
+! RECALCULA THE WIND SPEED
+
+      WIND13D = SQRT( U1MR3**2 + V1MR3**2 + W1MR3**2 )
+
+!!      WRITE(15,*) 
+!!      WRITE(15,*)'VENTO APOS A TERCEIRA ROTACAO  (m/s) =',WIND3D
+!!      WRITE(15,*)'===================================='
+
+! FIM DAS ROTACOES 3D
+
+! COMPONENTES TURBULENTAS corrigidas com rotacao
+
+  	  cu1_turb( : ) = U1R3( : ) - U1MR3
+	  cv1_turb( : ) = V1R3( : ) - V1MR3
+      cw1_turb( : ) = W1R3( : ) - W1MR3
+
+!Sao relativos ao arquivo raw, pois sao escalares (nao afetados pelas rotacoes)
+    
+	  ct1_turb( : ) = dados(line_b:line_t,11) - ( sum( dados(line_b:line_t,11) ) / bloco )
+      cq1_turb( : ) = dados(line_b:line_t,14) - ( sum( dados(line_b:line_t,14) ) / bloco )
+      cc1_turb( : ) = dados(line_b:line_t,13) - ( sum( dados(line_b:line_t,13) ) / bloco )
+
+! CALCULA ENERGIA CINETICA TURBULENTA
+
+      ECT1 =0.5*((sum(cu1_turb( : )**2)+sum(cv1_turb( : )**2)+sum(cw1_turb( : )**2))/bloco)
+      
+! CALCULA TEMPERATURA EM KELVIN (K = T(°C) + 273,15) 
+ 
+  	  T1 = (sum(dados(line_b:line_t,11))/size(dados(line_b:line_t,11)))	! T Celsius
+
+! CALCULA FLUXOS DE MOMENTUM, CALOR SENSIVEL E LATENTE
+  
+	  cw1u1 = sum(cw1_turb( : ) * cu1_turb( : ))/bloco
+      cw1v1 = sum(cw1_turb( : ) * cv1_turb( : ))/bloco
+      cw1t1 = sum(cw1_turb( : ) * ct1_turb( : ))/bloco
+      cw1q1 = sum(cw1_turb( : ) * cq1_turb( : ))/bloco
+	  cw1c1 = sum(cw1_turb( : ) * cc1_turb( : ))/bloco
+      sensivel1 = cw1t1 * rho * cp
+      latente1 = cw1q1 * LV * mmh2o
+
+! 44.0095 gmol <-CO2   
+   !cw1c1 = cw1c1 * massa_carbon * 2 * massa_oxigen * 10e-3 ! g/m2/s
+
+	   ccw1c1 = cw1c1 * 1000.  ! umol/m2/s
+	
+! CALCULOS PARA A CORRECAO DE WEBB
+! CALCULO DO FLUXO DE CALOR LATENTE PARA WEBB
+
+     wco2webb_le1 = ( mmarseco/mmvapor ) * ( (mmco2*mediac1)/rho ) * ( cw1q1*mmh2o )
+
+! CALCULO DO FLUXO DE CALOR SENSIVEL PARA WEBB
+
+	 wco2webb_h1 = ( 1. + ((mmh2o*mediaq1)/rho) * (mmarseco/mmvapor) ) * & 
+	   ( (mmco2*mediac1)/(273.15+mediat1) ) * cw1t1
+   		 
+! WEBB CORRECTION
+
+	 wco2webb_cor1 = (cw1c1 * mmco2) + wco2webb_le1 + wco2webb_h1
+   
+! WEBB CORRECTION EM micromol CO2 /m2/s
+
+     wco2webb_cor1 = (wco2webb_cor1/mmco2) * 1000.	! ok
+
+! WEBB CORRECTION EM miligramas	CO2 /m2/s
+	 wco2_mg=0.; wco2_gcd=0.;
+
+     wco2_mg = wco2webb_cor1 * mmco2 * 1000.		! ok
+
+! WEBB CORRECTION EM gramas	C /m2/d
+
+	 wco2_gcd = wco2webb_cor1 * 0.000012 * 86400.	! ok
+
+! wc_mg_kg=wc*(28.96)*(1.15)
+  
+!  print*,'wco2webb_le1 =',wco2webb_le1
+!  print*,'wco2webb_h1 =',wco2webb_h1
+!  print*,'wco2webb_cor1 =',wco2webb_cor1
+!  print*,'wco2_mg =',wco2_mg
+!  print*,'wco2_gcd =',wco2_gcd
+! CALCULO DO U STAR
+
+     ustar1 = SQRT( SQRT( (cw1u1)**2 + (cw1v1)**2 ) )
+
+! Calculando Desvios para u, v, w, t, (para q e c calculado anteriormente)
+
+	 sigmau = sqrt (sum (cu1_turb(:)**2)/bloco)
+	 sigmav = sqrt (sum (cv1_turb(:)**2)/bloco)
+	 sigmaw = sqrt (sum (cw1_turb(:)**2)/bloco)
+	 sigmat = sqrt (sum (ct1_turb(:)**2)/bloco)
+
+! Calculando os novos Desvios padroes (apos a troca)
+     newq1_turb(:)=0.;newc1_turb(:)=0.;
+     newsigmaq1=0.;newsigmac1=0.;
+
+     newq1_turb(:) = dados(line_b:line_t,14) - ( sum( dados(line_b:line_t,14) ) / bloco )
+     newc1_turb(:) = dados(line_b:line_t,13) - ( sum( dados(line_b:line_t,13) ) / bloco )
+
+     newsigmaq1 = sqrt (sum (newq1_turb(:)**2)/bloco)
+     newsigmac1 = sqrt (sum (newc1_turb(:)**2)/bloco)
+	  
+! CALCULANDO A COLUNA DO TEMPO (FRACAO DIA JULIANO,HH,HH,SS.S)
+	 time_in=0.;
+
+     time_in = dados(line_b,3) + (dados(line_b,4)/2400.) !+ (dados(line_b,5)/3600.)
+	 time = dados(line_b,3) + (dados(line_b,4)/2400.) + (STEP/864000.)	!avanca 3 minutos
+
+! CALCULANDO A COLUNA DO TEMPO HH,MM
+	 timehhmm=0.;
+	 timehhmm =  dados(line_b,4) + (STEP/600.)  !EX.: STEP=1800 ==> 1800/600 		
+												 !O 3 representa tres minutos
+	 if (timehhmm.EQ.60) then
+	 timehhmm = timehhmm + 40.
+	 end if
+
+	  if (timehhmm.EQ.160.OR.timehhmm.EQ.260.OR.timehhmm.EQ.360.OR.timehhmm.EQ.460.OR. & 
+	  timehhmm.EQ.560.OR.timehhmm.EQ.660.OR.timehhmm.EQ.760.OR.timehhmm.EQ.860.OR.     & 
+	  timehhmm.EQ.960.OR.timehhmm.EQ.1060.OR.timehhmm.EQ.1160.OR.timehhmm.EQ.1260.OR.  & 
+	  timehhmm.EQ.1360.OR.timehhmm.EQ.1460.OR.timehhmm.EQ.1560.OR.timehhmm.EQ.1660.OR. & 
+	  timehhmm.EQ.1760.OR.timehhmm.EQ.1860.OR.timehhmm.EQ.1960.OR.timehhmm.EQ.2060.OR. & 
+	  timehhmm.EQ.2160.OR.timehhmm.EQ.2260.OR.timehhmm.EQ.2360) then
+	  timehhmm = timehhmm + 40.
+	  end if
+	 
+! CALCULO DO TEMPO EM FRACAO DECIMAL (TEMPO DECIMAL HH,MM)
+	 MMMHHH=0.;MMM=0.;HHH=0.;HHMMout=0.;
+	 MMMHHH = dados(line_b,4) 
+
+	 MMM = amod(MMMHHH,100.)
+	 HHH = ifix(MMMHHH / 100.)
+	
+	 HHMMout = HHH + MMM/60.
+
+	 timedecimal = HHMMout + (STEP/36000.)  !EX.: STEP=1800 ==> (1800/600)/60			
+											 !0.05 representa 3 minutos decimais
+! CALCULO DO TEMPO EM FRACAO DECIMAL (TEMPO DECIMAL DJ,HHMM)	  
+	 timedjdeci=0.;
+	  
+	 timedjdeci = dados(line_b,3) + timedecimal/24.
+											
+ ! CALCULANDO AS MEDIAS DO NET,RADIACAO GLOBAL,PAR,FLUXO SOLO E TEMPERATURA SOLO PRESAO
+	 NET=0.;RG=0.;PAR=0.;FLXsolo=0.;Tsolo=0.;Pres=0.;
+	  
+	 Pres =    ( sum( dados(line_b:line_t,15) ) / bloco )
+     NET =     ( sum( dados(line_b:line_t,17) ) / bloco )
+	 RG =      ( sum( dados(line_b:line_t,18) ) / bloco )
+	 PAR =     ( sum( dados(line_b:line_t,19) ) / bloco )
+	 FLXsolo = ( sum( dados(line_b:line_t,20) ) / bloco )
+	 Tsolo =   ( sum( dados(line_b:line_t,21) ) / bloco )
+
+ ! Calculo de algumas grandesas
+	 e=0.;rm=0.;es=0.;RH=0.;Td=0.;Ro_h2o=0.;Ro_ar=0.;SH=0.;shceop=0.;
+
+	 Ro_h2o = ( sum( dados(line_b:line_t,14) ) / bloco ) * 0.018015 
+	            ! densidade H2O medido licor ( milimol/m3 ) * 0.018015 -> g/m3 
+
+  	 Ro_ar = ( (pres * 100.) / ((8.314/28.966) * (T1 + 273.15)) ) !(mol/m3)/28.964 ->g/m3
+
+	 SH = (Ro_h2o / Ro_ar) ! * 1000    ! tem que ser g/kg = kg/kg*1000
+
+	! e = (SH * pres ) / 0.622
+
+	 e = ( ( ro_h2o * ( T1 + 273.15 ) ) * 0.28705 ) / 100 ! pressao de vapor de agua mb
+
+	 rm = (0.622 * e) / (Pres - e) ! razao de mistura (gramas de vapor por gramas de ar seco)
+
+	 es =  6.112 * exp( (17.67 * T1) / (T1 + 243.5) ) ! pressao saturacao de vapor H2O mb
+													   
+	 RH = ( e / es ) * 100.							   ! umidade relativa (%)
+
+	 Td = log(e/6.112) * 243.5 / (17.67 - log(e/6.112))	  ! graus Celcius
+
+	 SHceop = (0.622*e) / (pres - (0.378*e))
+
+	! print*,'pressao atmosfera =',   pres
+	! print*,'pressao de vapor =',    e
+	! print*,'pressao de saturacao =',es
+	! print*,'rm =',  rm
+	! print*,'rh =',  rh
+	! print*,'sh =',  sh
+	! print*,'shceop =', shceop
+	! print*,'td =',  td
+	! print*,'tar =', T1
+	! print*,'ro_h2o =',ro_h2o 
+	! print*,'ro_ar =', ro_ar
+
+! CALCULAND0 0 COMPRIMENTO DE OBUKHOV  tem erro corrigir
+	! MOL=0.;
+
+	! MOL = - ((ustar1**3) * (T1 + 273.15)) / ( 0.35 * 9.81 * cw1t1 )
+
+	! print*,'MOL =',MOL
+     
+	 print*,'tempo=',timedjdeci
+      
+! ESCREVENDO A SAIDA DO ARQUIVO 
+! Se forem adicionados saidas para escrever até o 17, deve se ver mais abaixo   
+      
+     WRITE(13,1313)timedjdeci,time,timehhmm,timedecimal,cW1U1,cW1V1,cW1T1,cW1Q1,ccW1C1,sensivel1,latente1,T1,ECT1,ustar1,wco2webb_cor1,wco2_mg,wco2_gcd,sigmau,sigmav,sigmaw,sigmat,sigmac1,sigmaq1,newsigmac1,newsigmaq1,NET,RG,PAR,FLXsolo,Tsolo,Ro_h2o,Ro_ar,pres,e,es,RH,RM,SH,SHceop,Td    !,MOL																								 
+!                  1          2    3        4           5     6     7     8     9      10        11       12 13	  14	 15            16	   17       18	   19  	  20     21	    22      23	        24     25         26  27 28	 29		 30	   31	  32    33  34 35 36 37 38 39	  40    ! 41
+              																													    
+1313 FORMAT(1X,F8.4,1X,F8.4,1X,F8.0,1X,F8.2,1X,F10.6,1X,F14.11,1X,F10.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F10.6,1X,F14.6,1X,F10.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F10.6 ,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F12.6,1X,F14.6,1X,F12.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6,1X,F10.6) ! ,1X,F12.6)
+!           1       2       3       4       5        6         7        8        9		  10	   11	    12       13	      14	   15		16	     17	      18		19		 20	      21	   22		23		 24	      25	   26		27		 28	      29	   30		31		 32		  33	   34		35		 36		  37	   38		39		 40		   !  41
+      
+   line_b = line_b + STEP
+   line_t = line_b + bloco
+   line_s = line_s + STEP  
+ end do      !WHILE
+
+! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+! CALCULO DA PORCENTAGEM DOS DADOS q1 e c1 TROCADOS PELA MEDIA
+  
+  print*,'Total de dados q1 trocados =',trocaq1
+  print*,'Total de dados c1 trocados =',trocac1
+   
+  tot_lines = t_lines
+  p_trocaq1 = (trocaq1 / tot_lines)*100
+  p_trocac1 = (trocac1 / tot_lines)*100
+  
+  print*,'porcentagem de q1 trocados =',p_trocaq1
+  print*,'porcentagem de c1 trocados =',p_trocac1
+
+! ---------------------------------------------------------------
+! REESCREVE AS COLUNAS DO H2O E CO2, APOS SUBSTITUICAO PELA MEDIA  
+  do p=1,t_lines
+     WRITE(17,1717)dados(p,14),dados(p,13)
+1717 FORMAT(1X,F9.3,1X,F9.5)
+  end do
+       
+! FECHANDO OS ARQUIVOS (PRIMEIRA PARTE)
+  do i=11,17	!Fecha os arquivos de 11 a 17																																								                       
+     close(I)
+  end do
+
+! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+!PREPARANDO PARA SEPARAR O NEE EM NOTURNO E DIURNO
+
+ OPEN(UNIT = 13,FILE = SAIDA_STATIS)
+ OPEN(UNIT = 14,FILE = SAIDA_NEE )
+
+  dadosflux(:,:) = 0.;
+  NEE_DIURNO = 0.;NEE_NOTURNO = 0.;
+ 
+ print*,"Lendo o Arquivo de Fluxos"
+
+  do r=1,t_linesflux
+   READ(13,*,end=20)(dadosflux(r,s),s=1,NFflux)
+  end do
+
+  print*,"Erro lendo a linha:",t_linesflux
+20 continue
+   print*,'>>Arquivo de dados fluxo carregado com sucesso.'
+
+  do r=1,10
+   print '(9f10.6)',Dadosflux(r,17)
+  end do
+ print*,"===============================================================" 
+! SEPARANDO O NEE NOTURNO E DIURNO
+     somaNEE_N = 0.;somaNEE_D = 0.;
+
+  do r=1,t_linesflux
+    if ( r.LE.int(ins/step).OR.r.GE.int(ips/step) )	then
+     NEE_NOTURNO = dadosflux(r,17)   
+     NEE_DIURNO = 0	
+	 somaNEE_N =  somaNEE_N + ( dadosflux(r,17) / t_linesflux )
+   
+    else
+     NEE_DIURNO = dadosflux(r,17)   
+     NEE_NOTURNO = 0
+	 somaNEE_D =  somaNEE_D + ( dadosflux(r,17) / t_linesflux )
+   
+    end if
+   !end do	
+     WRITE(14,1414)NEE_NOTURNO,NEE_DIURNO,Dadosflux(r,17)
+1414 FORMAT(1X,F12.6,1X,F12.6,1X,F12.6)
+  end do
+
+   	 print*,"SOMA NEE NOTURNO",somaNEE_N
+	 print*,"SOMA NEE DIURNO",somaNEE_D
+
+     WRITE(18,1818)dj,trocaq1,trocac1,p_trocaq1,p_trocac1,tot_lines,NS,PS,somaNEE_N,somaNEE_D
+1818 FORMAT(1X,I3,1X,I6,1X,I6,1X,F8.4,1X,F8.4,1X,F10.1,1X,F10.6,1X,F10.6,1X,F12.6,1X,F12.6)
+ print*,"==============================================================="
+! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 
+! FECHANDO OS ARQUIVOS	FINAL
+  do i=13,18	!Fecha os arquivos de 13 a 18																																								                       
+     close(I)
+  end do
+
+enddo ! final do laço que intera sobre uma sequencia de DJ
+
+END ! PROGRAM	
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    Subroutine SPLIT_HHMM(serie,HH,MM,rows)
+      implicit none 
+      integer,intent(in) :: rows
+	  integer,dimension(1:rows),intent(in) :: serie
+      integer,dimension(1:rows),intent(out) :: HH,MM
+  	  INTEGER :: i
+	 
+	  do i=1,rows
+		  MM(i) = mod(serie(i),100)
+		  HH(i) = ( serie(i) - MM(i) )/100
+	  end do       
+    end subroutine SPLIT_HHMM

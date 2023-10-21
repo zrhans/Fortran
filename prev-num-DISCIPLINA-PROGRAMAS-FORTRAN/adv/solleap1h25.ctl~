@@ -1,0 +1,14 @@
+dset ^solleap1h.bin
+title "solleap1h.ctl"
+undef 1e+20
+dtype grib
+index ^model.gmp
+xdef 25 linear 0.000000 5.000000
+ydef 0 linear -90.000000 4.000000
+zdef 0 levels
+
+tdef 25 linear 0Z2jan1987  1dy
+vars 1
+temp
+endvars
+

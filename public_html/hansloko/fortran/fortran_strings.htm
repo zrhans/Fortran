@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Fortran Strings</title>
+<meta name="description" content="Fortran Strings - Learn Fortran Programming and how to develop Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<meta name="keywords" content="Fortran, Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<base href="http://www.tutorialspoint.com/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="fb:app_id" content="471319149685276" />
+<meta property="og:site_name" content="www.tutorialspoint.com" />
+<meta name="robots" content="index, follow"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="author" content="tutorialspoint.com">
+<script type="text/javascript" src="/theme/js/script-min-v4.js"></script>
+<link rel="stylesheet" href="/theme/css/style-min.css">
+<!-- Head Libs -->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="/theme/css/ie8.css">
+<![endif]-->
+<style>
+pre.prettyprint.tryit {min-height:37px; background: #eee url(fortran/images/tryit.jpg) top right no-repeat !important}div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, div.footer-copyright { background: #f18901 url(/images/pattern.png) repeat center center !important;}
+.sub-main-menu .sub-menuu div:hover, .sub-main-menu .viewall, header nav ul.nav-main li a:hover, button.btn-responsive-nav, header div.search button.btn-default { background: #f18901 !important;}
+.submenu-item{ border-bottom: 2px solid #f18901 !important; border-top: 2px solid #f18901 !important }
+</style>
+<script>
+$(document).ready(function() {
+  $('input[name="q"]').keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+</script>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="/fortran/images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" class="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" autocomplete="off" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit" onclick="javascript:void(0);"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li> <a href="https://www.tutorialspoint.com/netmeeting.php"><i class="icon-join-meeting"></i> &nbsp;NetMeeting</a> </li>
+            <li> <a href="/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="/articles/index.php"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <li> <a href="/questions_and_answers.htm"><i class="fa fa-question"></i> &nbsp;Quizzes</a> </li>
+            <li class="top-icons" style="display:none;">
+              <ul class="social-icons">
+              <li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+              <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+              <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Twitter">Twitter</a></li>
+              <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+              <li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+              </ul>
+           </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar nav-main">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown no-sub-menu"> <a class="dropdown" href="index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown" id="liTL"><a class="dropdown" href="javascript:void(0);"><span class="tut-lib"> Tutorials Library  <i class="fa-caret-down"></i></span></a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="codingground.htm"><i class="fa-code"></i> Coding Ground </a> </li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.send18.com" target="_blank"><i class="fa fa-send"></i>  Send18</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_file_conversion.htm"><i class="icon icon-refresh"></i>  Conversion</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_dev_tools.htm"><span class="dev-tools-menu">  Dev Tools</span></a></li>
+            </ul>
+         </nav>
+         <div class="submenu-item sub-main-menu" id="top-sub-menu"></div>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="/fortran/images/fortran-mini-logo.jpg" alt="Fortran Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">Fortran Tutorial</li>
+<li><a target="_top" href="/fortran/index.htm">Fortran - Home</a></li>
+<li><a target="_top" href="/fortran/fortran_overview.htm">Fortran - Overview</a></li>
+<li><a target="_top" href="/fortran/fortran_environment_setup.htm">Fortran - Environment Setup</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_syntax.htm">Fortran - Basic Syntax</a></li>
+<li><a target="_top" href="/fortran/fortran_data_types.htm">Fortran - Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_variables.htm">Fortran - Variables</a></li>
+<li><a target="_top" href="/fortran/fortran_constants.htm">Fortran - Constants</a></li>
+<li><a target="_top" href="/fortran/fortran_operators.htm">Fortran - Operators</a></li>
+<li><a target="_top" href="/fortran/fortran_decisions.htm">Fortran - Decisions</a></li>
+<li><a target="_top" href="/fortran/fortran_loops.htm">Fortran - Loops</a></li>
+<li><a target="_top" href="/fortran/fortran_numbers.htm">Fortran - Numbers</a></li>
+<li><a target="_top" href="/fortran/fortran_characters.htm">Fortran - Characters</a></li>
+<li><a target="_top" href="/fortran/fortran_strings.htm">Fortran - Strings</a></li>
+<li><a target="_top" href="/fortran/fortran_arrays.htm">Fortran - Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_dynamic_arrays.htm">Fortran - Dynamic Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_derived_data_types.htm">Fortran - Derived Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_pointers.htm">Fortran - Pointers</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_input_output.htm">Fortran - Basic Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_file_input_output.htm">Fortran - File Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_procedures.htm">Fortran - Procedures</a></li>
+<li><a target="_top" href="/fortran/fortran_modules.htm">Fortran - Modules</a></li>
+<li><a target="_top" href="/fortran/fortran_intrinsic_functions.htm">Fortran - Intrinsic Functions</a></li>
+<li><a target="_top" href="/fortran/fortran_numeric_precision.htm">Fortran - Numeric Precision</a></li>
+<li><a target="_top" href="/fortran/fortran_program_libraries.htm">Fortran - Program Libraries</a></li>
+<li><a target="_top" href="/fortran/fortran_programming_style.htm">Fortran - Programming Style</a></li>
+<li><a target="_top" href="/fortran/fortran_debugging_program.htm">Fortran - Debugging Program</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Fortran Resources</li>
+<li><a target="_top" href="/fortran/fortran_quick_guide.htm">Fortran - Quick Guide</a></li>
+<li><a target="_top" href="/fortran/fortran_useful_resources.htm">Fortran - Useful Resources</a></li>
+<li><a target="_top" href="/fortran/fortran_discussion.htm">Fortran - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="/questions_and_answers.htm">Questions and Answers</a></li>
+<li><a target="_top" href="/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="/hr_interview_questions/index.htm">HR Interview Questions</a></li>
+<li><a target="_top" href="/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Fortran - Strings</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js"> 
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_characters.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_arrays.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>The Fortran language can treat characters as single character or contiguous strings.</p>
+<p>A character string may be only one character in length, or it could even be of zero length. In Fortran, character constants are given between a pair of double or single quotes.</p>
+<p>The intrinsic data type <b>character</b> stores characters and strings. The length of the string can be specified by <b>len specifier</b>. If no length is specified, it is 1. You can refer individual characters within a string referring by position; the left most character is at position 1.</p>
+<h2>String Declaration</h2>
+<p>Declaring a string is same as other variables:</p>
+<pre class="result notranslate">
+type-specifier :: variable_name
+</pre>
+<p>For example,</p>
+<pre class="result notranslate">
+Character(len=20) :: firstname, surname
+</pre>
+<p>you can assign a value like,</p>
+<pre class="result notranslate">
+character (len=40) :: name  
+name = “Zara Ali”
+</pre>
+<p>The following example demonstrates declaration and use of character data type:</p>
+<pre class="prettyprint notranslate tryit">
+program hello
+implicit none
+
+   character(len=15) :: surname, firstname 
+   character(len=6) :: title 
+   character(len=25)::greetings
+   
+   title = 'Mr.' 
+   firstname = 'Rowan' 
+   surname = 'Atkinson'
+   greetings = 'A big hello from Mr. Beans'
+   
+   print *, 'Here is', title, firstname, surname
+   print *, greetings
+   
+end program hello
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+Here is Mr. Rowan Atkinson       
+A big hello from Mr. Bean
+</pre>
+<h2>String Concatenation</h2>
+<p>The concatenation operator //, concatenates strings.</p>
+<p>The following example demonstrates this:</p>
+<pre class="prettyprint notranslate tryit">
+program hello
+implicit none
+
+   character(len=15) :: surname, firstname 
+   character(len=6) :: title 
+   character(len=40):: name
+   character(len=25)::greetings
+   
+   title = 'Mr.' 
+   firstname = 'Rowan' 
+   surname = 'Atkinson'
+   
+   name = title//firstname//surname
+   greetings = 'A big hello from Mr. Beans'
+   
+   print *, 'Here is', name
+   print *, greetings
+   
+end program hello
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+Here is Mr. Rowan Atkinson       
+A big hello from Mr. Bean
+</pre>
+<h2>Extracting Substrings</h2>
+<p>In Fortran, you can extract a substring from a string by indexing the string, giving the start and the end index of the substring in a pair of brackets. This is called extent specifier.</p>
+<p>The following example shows how to extract the substring ‘world’ from the string ‘hello world’:</p>
+<pre class="prettyprint notranslate tryit">
+program subString
+
+   character(len=11)::hello
+   hello = "Hello World"
+   print*, hello(7:11)
+   
+end program subString 
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+World
+</pre>
+<p><b>Example</b></p>
+<p>The following example uses the <b>date_and_time</b> function to give the date and time string. We use extent specifiers to extract the year, date, month, hour, minutes and second information separately.</p>
+<pre class="prettyprint notranslate">
+program  datetime
+implicit none
+
+   character(len = 8) :: dateinfo ! ccyymmdd
+   character(len = 4) :: year, month*2, day*2
+
+   character(len = 10) :: timeinfo ! hhmmss.sss
+   character(len = 2)  :: hour, minute, second*6
+
+   call  date_and_time(dateinfo, timeinfo)
+
+   !  let’s break dateinfo into year, month and day.
+   !  dateinfo has a form of ccyymmdd, where cc = century, yy = year
+   !  mm = month and dd = day
+
+   year  = dateinfo(1:4)
+   month = dateinfo(5:6)
+   day   = dateinfo(7:8)
+
+   print*, 'Date String:', dateinfo
+   print*, 'Year:', year
+   print *,'Month:', month
+   print *,'Day:', day
+
+   !  let’s break timeinfo into hour, minute and second.
+   !  timeinfo has a form of hhmmss.sss, where h = hour, m = minute
+   !  and s = second
+
+   hour   = timeinfo(1:2)
+   minute = timeinfo(3:4)
+   second = timeinfo(5:10)
+
+   print*, 'Time String:', timeinfo
+   print*, 'Hour:', hour
+   print*, 'Minute:', minute
+   print*, 'Second:', second   
+   
+end program  datetime
+</pre>
+<p>When you compile and execute the above program, it gives the detailed date and time information:</p>
+<pre class="result notranslate">
+Date String: 20140803
+   Year: 2014
+   Month: 08
+   Day: 03
+   Time String: 075835.466
+   Hour: 07
+   Minute: 58
+   Second: 35.466
+</pre>
+<h2>Trimming Strings</h2>
+<p>The <b>trim</b> function takes a string, and returns the input string after removing all trailing blanks.</p>
+<p><b>Example</b></p>
+<pre class="prettyprint notranslate tryit">
+program trimString
+implicit none
+
+   character (len=*), parameter :: fname="Susanne", sname="Rizwan"
+   character (len=20) :: fullname 
+   
+   fullname=fname//" "//sname !concatenating the strings
+   
+   print*,fullname,", the beautiful dancer from the east!"
+   print*,trim(fullname),", the beautiful dancer from the east!"
+   
+end program trimString
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+Susanne Rizwan, the beautiful dancer from the east!
+Susanne Rizwan, the beautiful dancer from the east!
+</pre>
+<h2>Left and Right Adjustment of Strings</h2>
+<p>The function <b>adjustl</b> takes a string and returns it by removing the leading blanks and appending them as trailing blanks.</p>
+<p>The function <b>adjustr</b> takes a string and returns it by removing the trailing blanks and appending them as leading blanks.</p>
+<p><b>Example</b></p>
+<pre class="prettyprint notranslate tryit">
+program hello
+implicit none
+
+   character(len=15) :: surname, firstname 
+   character(len=6) :: title 
+   character(len=40):: name
+   character(len=25):: greetings
+   
+   title = 'Mr. ' 
+   firstname = 'Rowan' 
+   surname = 'Atkinson'
+   greetings = 'A big hello from Mr. Beans'
+   
+   name = adjustl(title)//adjustl(firstname)//adjustl(surname)
+   print *, 'Here is', name
+   print *, greetings
+   
+   name = adjustr(title)//adjustr(firstname)//adjustr(surname)
+   print *, 'Here is', name
+   print *, greetings
+   
+   name = trim(title)//trim(firstname)//trim(surname)
+   print *, 'Here is', name
+   print *, greetings
+   
+end program hello
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+Here is Mr. Rowan  Atkinson           
+A big hello from Mr. Bean
+Here is Mr. Rowan Atkinson    
+A big hello from Mr. Bean
+Here is Mr.RowanAtkinson                        
+A big hello from Mr. Bean
+</pre>
+<h2>Searching for a Substring in a String</h2>
+<p>The index function takes two strings and checks if the second string is a substring of the first string. If the second argument is a substring of the first argument, then it returns an integer which is the starting index of the second string in the first string, else it returns zero.</p>
+<p><b>Example</b></p>
+<pre class="prettyprint notranslate tryit">
+program hello
+implicit none
+
+   character(len=30) :: myString
+   character(len=10) :: testString
+   
+   myString = 'This is a test'
+   testString = 'test'
+   
+   if(index(myString, testString) == 0)then
+      print *, 'test is not found'
+   else
+      print *, 'test is found at index: ', index(myString, testString)
+   end if
+   
+end program hello
+</pre>
+<p>When you compile and execute the above program it produces the following result:</p>
+<pre class="result notranslate">
+test is found at index: 11
+</pre>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_characters.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="pdf-btn">
+<a href="/fortran/pdf/fortran_strings.pdf" title="Fortran Strings" target="_blank"><i class="icon icon-file-pdf-o big-font"></i> PDF</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_arrays.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+var width = 580;
+var height = 400;
+var format = "580x400_as";
+if( window.innerWidth < 468 ){
+   width = 300;
+   height = 250;
+   format = "300x250_as";
+}
+google_ad_client = "pub-7133395778201029";
+google_ad_width = width;
+google_ad_height = height;
+google_ad_format = format;
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<div class="simple-ad">
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.facebook.com/sharer.php?u=' + 'http://www.tutorialspoint.com/fortran/fortran_strings.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/facebookIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://twitter.com/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_strings.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/twitterIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://www.linkedin.com/cws/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_strings.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/linkedinIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://plus.google.com/share?url=http://www.tutorialspoint.com/fortran/fortran_strings.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/googlePlusIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.stumbleupon.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_strings.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/StumbleUponIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://reddit.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_strings.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=656,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/reddit.jpg" alt="img" />
+</a>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="index.htm" class="logo"> <img alt="Tutorials Point" class="img-responsive" src="/scripts/img/logo-footer.png"> </a>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <nav id="sub-menu">
+      <ul>
+         <li><a href="/about/tutorials_writing.htm">Write for us</a></li>
+         <li><a href="/about/faq.htm">FAQ's</a></li>
+         <li><a href="/about/about_helping.htm">Helping</a></li>
+         <li><a href="/about/contact_us.htm">Contact</a></li>
+      </ul>
+   </nav>
+</div>
+<div class="col-md-3 col-sm-12 col-xs-12">
+<p>&copy; Copyright 2016. All Rights Reserved.</p>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <div class="news-group">
+      <input type="text" class="form-control-foot search" name="textemail" id="textemail" autocomplete="off" placeholder="Enter email for newsletter" onfocus="if (this.value == 'Enter email for newsletter...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Enter email for newsletter...';}">
+      <span class="input-group-btn"> <button class="btn btn-default btn-footer" id="btnemail" type="submit" onclick="javascript:void(0);">go</button> </span>
+      <div id="newsresponse"></div>
+   </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="/theme/js/custom-min.js"></script>
+<script src="http://www.google-analytics.com/urchin.js">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('fortran/try_fortran.php');
+   tryit.compile();
+</script></div>
+</body>
+</html>

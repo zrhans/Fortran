@@ -1,0 +1,10 @@
+dset ^solleap1h.bin
+options little_endian
+undef 9.999E+20
+xdef 25 linear 270.0 2.5
+ydef 
+zdef 
+tdef 25 linear 00Z01jan1998 1hr
+vars 1
+temp   0 0  ** temperatura do ar [graus C]
+ENDVARS

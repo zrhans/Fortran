@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Fortran Operators</title>
+<meta name="description" content="Fortran Operators - Learn Fortran Programming and how to develop Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<meta name="keywords" content="Fortran, Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<base href="http://www.tutorialspoint.com/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="fb:app_id" content="471319149685276" />
+<meta property="og:site_name" content="www.tutorialspoint.com" />
+<meta name="robots" content="index, follow"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="author" content="tutorialspoint.com">
+<script type="text/javascript" src="/theme/js/script-min-v4.js"></script>
+<link rel="stylesheet" href="/theme/css/style-min.css">
+<!-- Head Libs -->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="/theme/css/ie8.css">
+<![endif]-->
+<style>
+pre.prettyprint.tryit {min-height:37px; background: #eee url(fortran/images/tryit.jpg) top right no-repeat !important}div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, div.footer-copyright { background: #f18901 url(/images/pattern.png) repeat center center !important;}
+.sub-main-menu .sub-menuu div:hover, .sub-main-menu .viewall, header nav ul.nav-main li a:hover, button.btn-responsive-nav, header div.search button.btn-default { background: #f18901 !important;}
+.submenu-item{ border-bottom: 2px solid #f18901 !important; border-top: 2px solid #f18901 !important }
+</style>
+<script>
+$(document).ready(function() {
+  $('input[name="q"]').keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+</script>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="/fortran/images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" class="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" autocomplete="off" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit" onclick="javascript:void(0);"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li> <a href="https://www.tutorialspoint.com/netmeeting.php"><i class="icon-join-meeting"></i> &nbsp;NetMeeting</a> </li>
+            <li> <a href="/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="/articles/index.php"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <li> <a href="/questions_and_answers.htm"><i class="fa fa-question"></i> &nbsp;Quizzes</a> </li>
+            <li class="top-icons" style="display:none;">
+              <ul class="social-icons">
+              <li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+              <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+              <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Twitter">Twitter</a></li>
+              <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+              <li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+              </ul>
+           </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar nav-main">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown no-sub-menu"> <a class="dropdown" href="index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown" id="liTL"><a class="dropdown" href="javascript:void(0);"><span class="tut-lib"> Tutorials Library  <i class="fa-caret-down"></i></span></a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="codingground.htm"><i class="fa-code"></i> Coding Ground </a> </li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.send18.com" target="_blank"><i class="fa fa-send"></i>  Send18</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_file_conversion.htm"><i class="icon icon-refresh"></i>  Conversion</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_dev_tools.htm"><span class="dev-tools-menu">  Dev Tools</span></a></li>
+            </ul>
+         </nav>
+         <div class="submenu-item sub-main-menu" id="top-sub-menu"></div>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="/fortran/images/fortran-mini-logo.jpg" alt="Fortran Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">Fortran Tutorial</li>
+<li><a target="_top" href="/fortran/index.htm">Fortran - Home</a></li>
+<li><a target="_top" href="/fortran/fortran_overview.htm">Fortran - Overview</a></li>
+<li><a target="_top" href="/fortran/fortran_environment_setup.htm">Fortran - Environment Setup</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_syntax.htm">Fortran - Basic Syntax</a></li>
+<li><a target="_top" href="/fortran/fortran_data_types.htm">Fortran - Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_variables.htm">Fortran - Variables</a></li>
+<li><a target="_top" href="/fortran/fortran_constants.htm">Fortran - Constants</a></li>
+<li><a target="_top" href="/fortran/fortran_operators.htm">Fortran - Operators</a></li>
+<li><a target="_top" href="/fortran/fortran_decisions.htm">Fortran - Decisions</a></li>
+<li><a target="_top" href="/fortran/fortran_loops.htm">Fortran - Loops</a></li>
+<li><a target="_top" href="/fortran/fortran_numbers.htm">Fortran - Numbers</a></li>
+<li><a target="_top" href="/fortran/fortran_characters.htm">Fortran - Characters</a></li>
+<li><a target="_top" href="/fortran/fortran_strings.htm">Fortran - Strings</a></li>
+<li><a target="_top" href="/fortran/fortran_arrays.htm">Fortran - Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_dynamic_arrays.htm">Fortran - Dynamic Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_derived_data_types.htm">Fortran - Derived Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_pointers.htm">Fortran - Pointers</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_input_output.htm">Fortran - Basic Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_file_input_output.htm">Fortran - File Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_procedures.htm">Fortran - Procedures</a></li>
+<li><a target="_top" href="/fortran/fortran_modules.htm">Fortran - Modules</a></li>
+<li><a target="_top" href="/fortran/fortran_intrinsic_functions.htm">Fortran - Intrinsic Functions</a></li>
+<li><a target="_top" href="/fortran/fortran_numeric_precision.htm">Fortran - Numeric Precision</a></li>
+<li><a target="_top" href="/fortran/fortran_program_libraries.htm">Fortran - Program Libraries</a></li>
+<li><a target="_top" href="/fortran/fortran_programming_style.htm">Fortran - Programming Style</a></li>
+<li><a target="_top" href="/fortran/fortran_debugging_program.htm">Fortran - Debugging Program</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Fortran Resources</li>
+<li><a target="_top" href="/fortran/fortran_quick_guide.htm">Fortran - Quick Guide</a></li>
+<li><a target="_top" href="/fortran/fortran_useful_resources.htm">Fortran - Useful Resources</a></li>
+<li><a target="_top" href="/fortran/fortran_discussion.htm">Fortran - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="/questions_and_answers.htm">Questions and Answers</a></li>
+<li><a target="_top" href="/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="/hr_interview_questions/index.htm">HR Interview Questions</a></li>
+<li><a target="_top" href="/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Fortran - Operators</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js"> 
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_constants.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_decisions.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>An operator is a symbol that tells the compiler to perform specific mathematical or logical manipulations. Fortran provides the following types of operators:</p>
+<ul class="list">
+<li>Arithmetic Operators</li>
+<li>Relational Operators</li>
+<li>Logical Operators</li>
+</ul>
+<p>Let us look at all these types of operators one by one.</p>
+<h2>Arithmetic Operators</h2>
+<p>Following table shows all the arithmetic operators supported by Fortran. Assume variable <b>A</b> holds 5 and variable <b>B</b> holds 3 then:</p>
+<p><a href="/fortran/fortran_arithmetic_operators.htm">Show Examples</a></p>
+<table class="table table-bordered">
+<tr>
+<th>Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>+</td>
+<td>Addition Operator, adds two operands.</td>
+<td style="width:24%;">A + B will give 8</td>
+</tr>
+<tr>
+<td>-</td>
+<td>Subtraction Operator, subtracts second operand from the first.</td>
+<td>A - B will give 2</td>
+</tr>
+<tr>
+<td>*</td>
+<td>Multiplication Operator, multiplies both operands.</td>
+<td>A * B will give 15</td>
+</tr>
+<tr>
+<td>/</td>
+<td>Division Operator, divides numerator by de-numerator.</td>
+<td>A / B will give 1</td>
+</tr>
+<tr>
+<td>**</td>
+<td>Exponentiation Operator, raises one operand to the power of the other.</td>
+<td>A ** B will give 125</td>
+</tr>
+</table>
+<h2>Relational Operators</h2>
+<p>Following table shows all the relational operators supported by Fortran. Assume variable <b>A</b> holds 10 and variable <b>B</b> holds 20, then:</p>
+<p><a href="/fortran/fortran_relational_operators.htm">Show Examples</a></p>
+<table class="table table-bordered">
+<tr>
+<th>Operator</th>
+<th>Equivalent</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>==</td>
+<td>.eq.</td>
+<td>Checks if the values of two operands are equal or not, if yes then condition becomes true.</td>
+<td>(A == B) is not true.</td>
+</tr>
+<tr>
+<td>/=</td>
+<td>.ne.</td>
+<td>Checks if the values of two operands are equal or not, if values are not equal then condition becomes true.</td>
+<td>(A != B) is true.</td>
+</tr>
+<tr>
+<td>></td>
+<td>.gt.</td>
+<td>Checks if the value of left operand is greater than the value of right operand, if yes then condition becomes true.</td>
+<td>(A > B) is not true.</td>
+</tr>
+<tr>
+<td><</td>
+<td>.lt.</td>
+<td>Checks if the value of left operand is less than the value of right operand, if yes then condition becomes true.</td>
+<td>(A &lt; B) is true.</td>
+</tr>
+<tr>
+<td>>=</td>
+<td>.ge.</td>
+<td>Checks if the value of left operand is greater than or equal to the value of right operand, if yes then condition becomes true.</td>
+<td>(A >= B) is not true.</td>
+</tr>
+<tr>
+<td><=</td>
+<td>.le.</td>
+<td>Checks if the value of left operand is less than or equal to the value of right operand, if yes then condition becomes true.</td>
+<td>(A <= B) is true.</td>
+</tr>
+</table>
+<h2>Logical Operators</h2>
+<p>Logical operators in Fortran work only on logical values .true. and .false.</p>
+<p>The following table shows all the logical operators supported by Fortran. Assume variable A holds .true. and variable B holds .false. , then:</p>
+<p><a href="/fortran/fortran_logical_operators.htm">Show Examples</a></p>
+<table class="table table-bordered">
+<tr>
+<th>Operator</th>
+<th>Description</th>
+<th style="width:25%;">Example</th>
+</tr>
+<tr>
+<td>.and.</td>
+<td>Called Logical AND operator. If both the operands are non-zero, then condition becomes true.</td>
+<td>(A .and. B) is false.</td>
+</tr>
+<tr>
+<td>.or.</td>
+<td>Called Logical OR Operator. If any of the two operands is non-zero, then condition becomes true.</td>
+<td>(A .or. B) is true.</td>
+</tr>
+<tr>
+<td>.not.</td>
+<td>Called Logical NOT Operator. Use to reverses the logical state of its operand. If a condition is true then Logical NOT operator will make false.</td>
+<td>!(A .and. B) is true.</td>
+</tr>
+<tr>
+<td>.eqv.</td>
+<td>Called Logical EQUIVALENT Operator. Used to check equivalence of two logical values.</td>
+<td>(A .eqv. B) is false.</td>
+</tr>
+<tr>
+<td>.neqv.</td>
+<td>Called Logical NON-EQUIVALENT Operator. Used to check non-equivalence of two logical values.</td>
+<td>(A .neqv. B) is true.</td>
+</tr>
+</table>
+<h2>Operators Precedence in Fortran</h2>
+<p>Operator precedence determines the grouping of terms in an expression. This affects how an expression is evaluated. Certain operators have higher precedence than others; for example, the multiplication operator has higher precedence than the addition operator.</p>
+<p>For example, x = 7 + 3 * 2; here, x is assigned 13, not 20 because operator * has higher precedence than +, so it first gets multiplied with 3*2 and then adds into 7.</p>
+<p>Here, operators with the highest precedence appear at the top of the table, those with the lowest appear at the bottom. Within an expression, higher precedence operators will be evaluated first.</p>
+<p><a href="/fortran/fortran_operators_precedence.htm">Show Examples</a></p>
+<table class="table table-bordered">
+<tr>
+<th>Category</th>
+<th>Operator</th>
+<th>Associativity</th>
+</tr>
+<tr>
+<td>Logical NOT and negative sign</td>
+<td>.not. (-)</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Exponentiation</td>
+<td>**</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Multiplicative</td>
+<td>* /</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Additive</td>
+<td>+ -</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Relational</td>
+<td>< <= > >=</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Equality</td>
+<td>== /=</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Logical AND</td>
+<td>.and.</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Logical OR</td>
+<td>.or.</td>
+<td>Left to right</td>
+</tr>
+<tr>
+<td>Assignment</td>
+<td>=</td>
+<td>Right to left</td>
+</tr>
+</table>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_constants.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="pdf-btn">
+<a href="/fortran/pdf/fortran_operators.pdf" title="Fortran Operators" target="_blank"><i class="icon icon-file-pdf-o big-font"></i> PDF</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_decisions.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+var width = 580;
+var height = 400;
+var format = "580x400_as";
+if( window.innerWidth < 468 ){
+   width = 300;
+   height = 250;
+   format = "300x250_as";
+}
+google_ad_client = "pub-7133395778201029";
+google_ad_width = width;
+google_ad_height = height;
+google_ad_format = format;
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<div class="simple-ad">
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.facebook.com/sharer.php?u=' + 'http://www.tutorialspoint.com/fortran/fortran_operators.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/facebookIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://twitter.com/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_operators.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/twitterIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://www.linkedin.com/cws/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_operators.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/linkedinIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://plus.google.com/share?url=http://www.tutorialspoint.com/fortran/fortran_operators.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/googlePlusIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.stumbleupon.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_operators.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/StumbleUponIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://reddit.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_operators.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=656,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/reddit.jpg" alt="img" />
+</a>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="index.htm" class="logo"> <img alt="Tutorials Point" class="img-responsive" src="/scripts/img/logo-footer.png"> </a>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <nav id="sub-menu">
+      <ul>
+         <li><a href="/about/tutorials_writing.htm">Write for us</a></li>
+         <li><a href="/about/faq.htm">FAQ's</a></li>
+         <li><a href="/about/about_helping.htm">Helping</a></li>
+         <li><a href="/about/contact_us.htm">Contact</a></li>
+      </ul>
+   </nav>
+</div>
+<div class="col-md-3 col-sm-12 col-xs-12">
+<p>&copy; Copyright 2016. All Rights Reserved.</p>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <div class="news-group">
+      <input type="text" class="form-control-foot search" name="textemail" id="textemail" autocomplete="off" placeholder="Enter email for newsletter" onfocus="if (this.value == 'Enter email for newsletter...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Enter email for newsletter...';}">
+      <span class="input-group-btn"> <button class="btn btn-default btn-footer" id="btnemail" type="submit" onclick="javascript:void(0);">go</button> </span>
+      <div id="newsresponse"></div>
+   </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="/theme/js/custom-min.js"></script>
+<script src="http://www.google-analytics.com/urchin.js">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('fortran/try_fortran.php');
+   tryit.compile();
+</script></div>
+</body>
+</html>

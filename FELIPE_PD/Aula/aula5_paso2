@@ -1,0 +1,8 @@
+
+      PROGRAM aula5
+      IMPLICIT NoNE
+
+      REAL C, D, G, P, X, Y
+      INTEGER A, B, I, H, N, M, F, T
+
+      END PROGRAM

@@ -1,0 +1,327 @@
+#!/bin/bash
+clear
+DIALOG=${DIALOG=Xdialog}
+if [ ! $DIALOG ]
+then
+	echo " Xdialog nao encontrado"
+	exit 1
+fi
+	path=`pwd`
+	buceta=$1
+	graficos="graficos";data="data";spcdia="spcdia";
+	spcmes="spcmes";usados="usados";spcmedio="meanspc";
+	    
+########################################################################
+###
+# Seleção de ações p o aplicativo      #
+########################################################################
+###
+mediasspc()
+{
+cd spcmes
+filetoremove='bandas-spcmedio.sh'
+remfile
+filetoremove='bandas-espectro_medio.f'
+remfile
+ln -s ../../bandas-espectro_medio.f
+ln -s ../../bandas-spcmedio.sh
+#por aqui om box com pedido de numero de bandas 
+#para a media
+bandas=`$DIALOG --stdout --title "BANDAS" --titleback "Seleção de BANDAS" --spinbox "Escolha o número de bandas" 0 0 "5" "50" "20" "" `
+ls ?????-??C?-* ?????-??S?-* >xi
+xii=`wc -l xi | awk '{print $1}'`
+rm -f xi
+step=`expr 100 / $xii`
+
+compteur="0"
+step=`expr 100 / $xii`
+
+#step=`expr 100 / 16`
+
+(
+echo "$compteur" ; #sleep 1
+for x in `ls ?????-??C?-* ?????-??S?-*`
+do
+echo "XXX"
+echo " \\n Executando: $x";#sleep 1
+./bandas-spcmedio.sh $x $bandas
+echo "XXX"
+compteur=`expr $compteur + $step`
+echo "$compteur" ; #sleep 1
+done; 
+) | $DIALOG --title "Microm 2006 " --gauge "Execução de Media em \\n Espectros" 20 60 
+cd ..
+return
+}
+
+
+consist()
+{
+grep -c '*' spcmes/*S* >logconsist.micr
+resultado=`cat logconsist.micr`
+$DIALOG --title "Consistencia: " --tailbox "$resultado" 24 64
+case $? in
+  0)
+    echo "OK."
+    acoes
+    ;;
+  1)
+    echo "Cancel pressed.";;
+  255)
+    echo "Box closed.";;
+esac
+return
+}
+
+montapastas()
+{
+ (
+ echo "0" ; sleep 1
+ echo "XXX"
+if [ -d "$path/$graficos" ]; then
+  echo "Verificando: \\n $path/$graficos ..." 
+  else
+  mkdir "$path/$graficos"
+  echo "Criando: \\n $path/$graficos ..." 
+fi
+echo "XXX"
+echo "15" ; sleep 1
+echo "XXX"
+if [ -d "$path/$data" ]; then
+  echo "Verificando: \\n $path/$data ..." 
+  else
+  mkdir "$path/$data"
+  echo "Criando: \\n $path/$data ..." 
+fi
+echo "XXX"
+echo "30" ; sleep 1
+echo "XXX"
+if [ -d "$path/$usados" ]; then
+  echo "Verificando: \\n $path/$usados ..." 
+  else
+  mkdir "$path/$usados"
+  echo "Criando: \\n $path/$usados ..." 
+fi
+echo "XXX"
+echo "45" ; sleep 1
+echo "XXX"
+if [ -d "$path/$spcmes" ]; then
+  echo "Verificando: \\n $path/$spcmes ..." 
+  else
+  mkdir "$path/$spcmes"
+  echo "Criando: \\n $path/$spcmes ..." 
+fi
+echo "XXX"
+echo "60" ; sleep 1
+echo "XXX"
+if [ -d "$path/$spcdia" ]; then
+  echo "Verificando: \\n $path/$spcdia ..." 
+  else
+  mkdir "$path/$spcdia"
+  echo "Criando: \\n $path/$spcdia ..." 
+fi
+echo "XXX"
+echo "85" ; sleep 1
+echo "XXX"
+if [ -d "$path/$spcmedio" ]; then
+  echo "Verificando: \\n $path/$spcmedio ..." 
+  else
+  mkdir "$path/$spcmedio"
+  echo "Criando $path/$spcmedio ..." 
+fi
+echo "XXX"
+echo "100" ; sleep 1
+ ) | $DIALOG --title "Microm 2006 " --gauge "Verificação e criação\\n de pastas" 10 80 
+return
+}
+verifica()
+{
+ if [ -f $path/$status ]; then
+ echo "Verificando $path/$status ..."
+ else
+ echo "Verificando $path/$status ...FAILED !!!!!"
+ fi
+return
+}
+extrai()
+{
+ echo "\\n --[ extraindo $filegz ]--"
+ gunzip $filegz
+return
+}
+comprime()
+{
+echo "--[ comprimindo $file ]--"
+gzip $file
+if [ -f $filegz ]; then
+mv $filegz usados/
+ echo "\\n comprimido e movido para pasta usados ... "
+else
+echo "\\n falha de compressão ...FAILED" 
+fi
+return
+}
+remfile()
+{
+if [ -f $filetoremove ]; then
+  echo "\\n existe $filetoremove removendo ..."
+  rm -f $filetoremove
+  else
+  echo "\\n nao existe $filetoremove"
+fi
+return
+}
+
+
+# ajusta_nome() <- pega os arquivos que começam com S
+# e adiciona o prefixo F (filtrado) e a extensão de acordo
+# com o dia de dados calculados. Fxxxx.Dxx e apenda
+
+ajusta_apenda(){
+for spc in S* 
+do
+classe=`echo $spc | cut -c1-4`
+ano_mes=`echo $file | cut -c1-7`
+# transforma o recem calculado com novo nome
+mv $spc $CAS-$classe-$ano_mes.D$dia
+# apenda arquivos de espectros de acordo com a classe de estabilidade
+cat $CAS-$classe-$ano_mes.D$dia >> spcmes/$CAS-$classe-$ano_mes.spc
+mv $CAS-$classe-$ano_mes.D$dia spcdia/
+#mv *.D$dia data/
+#rm -f GE*
+done
+return
+}
+
+executar()
+{
+total=`ls *.dat.gz | wc -l`
+step=`expr 100 / $total`
+num=0
+montapastas
+(
+echo "$compteur" ; #sleep 1
+	for filegz in *.dat.gz
+	do
+        num=$((num + 1)) 
+	echo "XXX"
+	extrai
+
+	c=$buceta
+	file=`echo $filegz | cut -c 1-14`
+	dia=`echo $file | cut -c9-10`
+	filetoremove="INPUT.DAT"
+	CAS=`echo $c | cut -c1-5`
+	nome=$file
+        running="$c running \\n $file \\n"
+
+	remfile
+ 
+	sleep 1
+
+	echo "\\n carregando dados... "
+	cp $file INPUT.DAT
+        echo "OK \\n"
+# executando o programa em fortran
+	echo "\\n $running ($num de $total) \\n "
+	./$c
+#	./coco
+	echo "\\n"
+	comprime
+	echo "\\n"
+	ajusta_apenda
+	echo "\\n"
+echo "XXX"
+	compteur=`expr $compteur + $step`
+	echo "$compteur" ; #sleep 1
+	done;
+sleep 3
+) | $DIALOG --title "Microm 2006 " --gauge "Cálculo de Espectros \\n Sítio STM/km77 \\n Executando 1 de $total" 20 60 
+s1="off";s2="on";s3="off"
+menu
+
+return
+}
+
+menu()
+{
+c="$1"
+datas=`date`
+MENU=`$DIALOG --and-widget --stdout --nocancel --title "MENU MICROM 2006" \
+--backtitle "Usuário: $USER - $datas" \
+--cancel-label "Cancelar" --menu "Escolha a tarefa a executar !" 20 70 4 \
+EXECUTAR "Executar $buceta" \
+MEDIAS "Calcular espectros medios" \
+LIMPEZA "Limpar pasta de trabalho" \
+FIM "Sair do menu"`
+case $? in
+  0)
+	case $MENU in
+		EXECUTAR)executar;;
+		MEDIAS)mediasspc;;
+		LIMPEZA)./limpa;;
+		FIM)clear exit 1;;
+        esac
+	;;
+  1)
+      exit 0
+       ;;
+ 255)
+      exit 1
+       ;;
+esac
+return
+}
+
+
+# 
+# 
+# menu()
+# {
+# 
+# 
+# CHOICE=`$DIALOG --and-widget --stdout --title "MENU MICROM 2006" \
+#  --wizard --no-cancel --help "oi" \
+#  --radiolist "Clique na tarefa desejada!" 0 0 4 \
+#          "Executar   " "$buceta" "$s1" \
+#           "Médias_SPC  " "" "$s2" \
+#           "Configuracoes_Automaticas" " " "$s3"`
+# case $? in
+#   0)
+# 	for i in $CHOICE ; 
+# 	do
+# 	   case $i in
+# 			Executar)
+# 			executar
+# 			;;
+# 			Médias_SPC)
+# 			mediasspc	
+# 			;;
+# 			configuracoes_Automaticas)
+# 			echo "Sendo implementado"
+# 	   esac
+# 	done
+# 	;;
+#   3)
+#       exit 0
+#        ;;
+#  255)
+#       exit 0
+#        ;;
+# esac     
+# 
+# #colunas
+# return
+# }
+
+if [ $# -ne 1 ]; then
+
+ echo "";echo "Usage: $0 filename";echo ""
+ echo " $USER! Digite o nome do arquivo em fortran para executar."
+ echo " Exemplo: $0 programa.x77";echo ""
+ else
+clear
+s1="on";s2="off";s3="off"
+menu
+
+fi

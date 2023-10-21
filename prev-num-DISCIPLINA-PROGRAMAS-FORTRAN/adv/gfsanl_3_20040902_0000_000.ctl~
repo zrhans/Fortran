@@ -1,0 +1,519 @@
+DSET ^gfsanl_3_20040902_0000_000.grb
+
+INDEX ^gfsanl_3_20040902_0000_000.idx
+undef 9.999E+20
+*
+title Global Forecast System : 20040902 0000 UTC cycle - Analysis only
+*
+options yrev
+dtype grib 3
+xdef 360 linear   0 1
+ydef 181 linear -90 1
+tdef 1 linear 00:00z02sep2004 3hr
+zdef 26 levels
+1000 975 950 925 900 850 800 750 700 650 600 550 500 450 400 350 300 
+250 200 150 100 70 50 30 20 10 
+*
+vars 145
+no4LFTX  0 132,1,0      surface Best (4-layer) lifted index [K]
+no5WAVH  0 222,100,500  ** -5-wave geopotential height [gpm]
+ABSV     26 41,100,0    Absolute vorticity [/s]
+ACPCP    0 63,1,0       surface Convective precipitation [kg/m^2] 
+APCP     0 61,1,0       surface Total precipitation [kg/m^2] 
+CAPE     0 157,1,0      surface Convective Avail. Pot. Energy [J/kg]
+CAPE180_0mb 0 157,116,46080 ** 180-0 mb above gnd Convective Avail. Pot. Energy [J/kg]
+oCFRZR   0 141,1,0      surface Categorical freezing rain [yes=1 no=0] 
+oCICEP   0 142,1,0      surface Categorical ice pellets [yes=1 no=0] 
+CIN      0 156,1,0      surface Convective inhibition [J/kg]
+CIN180_0mb  0 156,116,46080 ** 180-0 mb above gnd Convective inhibition [J/kg]
+oCPRAT   0 214,1,0      surface Convective precip. rate [kg/m^2/s] 
+oCRAIN   0 140,1,0      surface Categorical rain [yes=1 no=0] 
+oCSNOW   0 143,1,0      surface Categorical snow [yes=1 no=0] 
+oCWORKclm  0 146,200,0  atmos column Cloud work function [J/kg]
+oDLWRFsfc  0 205,1,0    surface Downward long wave flux [W/m^2] 
+oDSWRFsfc  0 204,1,0    surface Downward short wave flux [W/m^2] 
+GFLUX    0 155,1,0      surface Ground heat flux [W/m^2] 
+HGTsfc   0 7,1,0        surface Geopotential height [gpm]
+HGT      26 7,100,0     Geopotential height [gpm]
+HGTmwl   0 7,6,0        max wind level Geopotential height [gpm]
+HGTtrp   0 7,7,0        tropopause Geopotential height [gpm]
+HPBL     0 221,1,0      surface Planetary boundary layer height [m]
+ICEC     0 91,1,0       surface Ice concentration (ice=1 no ice=0) [fraction]
+LAND     0 81,1,0       surface Land cover (land=1 sea=0) [fraction]
+LFTX     0 131,1,0      surface lifted index [K]
+oLHTFL   0 121,1,0      surface Latent heat flux [W/m^2] 
+O3MR_100mb 0 154,100,100 Ozone mixing ratio on 100mb [kg/kg]
+O3MR_70mb  0 154,100,70 Ozone mixing ratio on 70mb [kg/kg]
+O3MR_50mb  0 154,100,50 Ozone mixing ratio on 50mb [kg/kg]
+O3MR_30mb  0 154,100,30 Ozone mixing ratio on 30mb [kg/kg]
+O3MR_20mb  0 154,100,20 Ozone mixing ratio on 20mb [kg/kg]
+O3MR_10mb  0 154,100,10 Ozone mixing ratio on 10mb [kg/kg]
+oPEVPR     0 145,1,0    surface Potential evaporation rate [W/m^2] 
+POTsig995 0 13,107,9950 sigma=.995 Potential temperature [K]
+oPRATE   0 59,1,0       surface Precipitation rate [kg/m^2/s] 
+PRESsfc  0 1,1,0        surface Pressure [Pa]
+PRESlcb  0 1,212,0      low cloud base Pressure [Pa] 
+PRESlct  0 1,213,0      low cloud top Pressure [Pa] 
+PRESmcb  0 1,222,0      mid cloud base Pressure [Pa] 
+PRESmct  0 1,223,0      mid cloud top Pressure [Pa] 
+PREShcb  0 1,232,0      high cloud base Pressure [Pa] 
+PREShct  0 1,233,0      high cloud top Pressure [Pa] 
+CLWMR    26 153,100,0   Cloud water [kg/kg]
+PREScvb  0 1,242,0      convective cloud base Pressure [Pa]
+PREScvt  0 1,243,0      convective cloud top Pressure [Pa]
+PRESmwl  0 1,6,0        max wind level Pressure [Pa]
+PREStrp  0 1,7,0        tropopause Pressure [Pa]
+PRMSL    0 2,102,0      Pressure reduced to mean sea level [Pa]
+PWATclm  0 54,200,0     atmos column Precipitable water [kg/m^2]
+RH 21    52,100,0       Relative humidity [%]
+RH2m     0 52,105,2     Relative humidity  2 m [%]
+RHsig995 0 52,107,9950  sigma=.995 Relative humidity [%]
+RH30_0mb 0 52,116,7680  ** 30-0 mb above gnd Relative humidity [%]
+RHclm    0 52,200,0     atmos column Relative humidity [%]
+oSHTFL   0 122,1,0      surface Sensible heat flux [W/m^2] 
+SOILWSoilT  0 144,112,10 Volumetric soil moisture  0-10 m undergnd. [fraction]
+SOILWSoilM  0 144,112,2760 Volumetric soil moisture  10-200 cm undergnd. [fraction]
+SPFH2m   0 51,105,2     Specific humidity  2 m [kg/kg]
+SPFH30_0mb  0 51,116,7680 Specific humidity  30-0 mb above gnd. [kg/kg]
+oTCDCclm 0 71,200,0     atmos column Total cloud cover [%] 
+oTCDCbcl 0 71,211,0     boundary cloud layer Total cloud cover [%] 
+oTCDClcl 0 71,214,0     low cloud level Total cloud cover [%] 
+oTCDCmcl 0 71,224,0     mid cloud level Total cloud cover [%] 
+oTCDChcl 0 71,234,0     high cloud level Total cloud cover [%] 
+oTCDCcvl 0 71,244,0     convective cld layer Total cloud cover [%] 
+TMAX2m   0 15,105,2     Max. Air Temperature 2 m [K] 
+TMIN2m   0 16,105,2     Min. Air Temperature 2 m [K] 
+TMPsfc   0 11,1,0       Air Temperature surface [K]
+TMP      26 11,100,0    Air Temperature at Constant pressure level [K]
+TMP1829m 0 11,103,1829  Air Temperature  1829 m [K]
+TMP2743m 0 11,103,2743  Air Temperature  2743 m [K]
+TMP3658m 0 11,103,3658  Air Temperature  3658 m [K]
+TMP2m    0 11,105,2     Air Temperature  2 m [K]
+TMPsig995  0 11,107,9950 sig=.995 Air Temperature [K]
+TMPSoilT 0 11,112,10    ** 0-10cm undergnd Temp. [K]
+TMPSoilM 0 11,112,2760  ** 10-200 cm undergnd Temp. [K]
+TMP30_0mb 0 11,116,7680 ** 30-0 mb above gnd Air Temperature [K]
+oTMPlct  0 11,213,0     low cloud top Temp. [K] 
+oTMPmct  0 11,223,0     mid cloud top Temp. [K] 
+oTMPhct  0 11,233,0     high cloud top Temp. [K] 
+TMPmwl   0 11,6,0       max wind level Temp. [K]
+TMPtrp   0 11,7,0       tropopause Temp. [K]
+TOZNEclm 0 10,200,0     atmos column Total ozone [Dobson]
+UGWD     0 147,1,0      surface Zonal gravity wave stress [N/m^2]
+oUFLX    0 124,1,0      surface Zonal momentum flux [N/m^2] 
+UGRD     26 33,100,0    U wind  Constant pressure level [m/s]
+UGRD1829m 0 33,103,1829 ** 1829 m u wind [m/s]
+UGRD2743m 0 33,103,2743 ** 2743 m u wind [m/s]
+UGRD3658m 0 33,103,3658 ** 3658 m u wind [m/s]
+UGRD10m   0 33,105,10   U wind  10 m [m/s]
+UGRDsig995  0 33,107,9950 sigma=.995 U wind [m/s]
+UGRD30_0mb  0 33,116,7680 ** 30-0 mb above gnd u wind [m/s]
+UGRDmwl   0 33,6,0           max wind level u wind [m/s]
+UGRDtrp   0 33,7,0           tropopause u wind [m/s]
+oULWRFsfc 0 212,1,0          surface upward long wave flux [W/m^2] 
+oULWRFtoa 0 212,8,0          top of atmos upward long wave flux [W/m^2] 
+oUSWRFsfc 0 211,1,0          surface upward short wave flux [W/m^2] 
+oUSWRFtoa 0 211,8,0          top of atmos upward short wave flux [W/m^2] 
+VGWD      0 148,1,0          surface Meridional gravity wave stress [N/m^2]
+oVFLX     0 125,1,0          surface Meridional momentum flux [N/m^2] 
+VGRD      26 34,100,0        V wind  Constant Pressure level [m/s]
+VGRD1829m 0 34,103,1829      V wind  1929 m [m/s]
+VGRD2743m 0 34,103,2743      V wind  2743 m [m/s]
+VGRD3658m 0 34,103,3658      V wind  3658 m [m/s]
+VGRD10m   0 34,105,10        V wind  10 m [m/s]
+VGRDsig995 0 34,107,9950     V-wind  sigma 0.995 [m/s]
+VGRD30_0mb 0 34,116,7680  ** 30-0 mb above gnd v wind [m/s]
+VGRDmwl   0 34,6,0           max wind level v wind [m/s]
+VGRDtrp   0 34,7,0           tropopause v wind [m/s]
+VVEL      21 39,100,0        Pressure vertical velocity [Pa/s]
+VVELsig995  0 39,107,9950    Pressure vertical velocity  sigma 0.995 [Pa/s]
+VWSHtrp  0 136,7,0           Tropopause Vertical speed shear [1/s]
+oWATR  0 90,1,0              surface Water runoff [kg/m^2] 
+WEASD  0 65,1,0              surface Accum. snow [kg/m^2]
+RHsig1     0 52,108,44,100 Relative Humidity : sigma 0.44 to 1.00 [%]
+RHsig2     0 52,108,72,94  Relative Humidity : sigma 0.72 to 0.94 [%]
+RHsig3     0 52,108,44,72  Relative Humidity : sigma 0.44 to 0.72 [%]
+RHsig4     0 52,108,33,100 Relative Humidity : sigma 0.33 to 1.00 [%]
+CWATATM    0 76,200,0      Atmospheric Column Cloud water [kg/m^2]
+HGT0DEG    0 7,4,0         Geopotential Height on 0 deg. Isotherm [gpm]
+RH0DEG     0 52,4,0        Relative Humidity on 0 deg. Isotherm [%]
+HGTHTFL    0 7,204,0       Geopotential Height at Highest Trop. Freezing Level [gpm]
+RHHTFL     0 52,204,0      Relative Humidity at Highest Trop. Freezing Leve l [%]
+HGTANOM    15 27,100,0     Geopotential Height Anomaly (1000 & 500 mb) [gpm]
+WAVA5    0 230,100,500  ** (500 mb) 5-wave geopot. height anomaly [gpm]
+ALBDO      0 84,1,0        Surface Albedo [%]
+SOILW10   0 144,112,2600   Soil Moisture 10-40 cm below sfc
+SOILW40  0 144,112,10340   Soil Moisture 40-100 cm below sfc
+SOILW100 0 144,112,25800   Soil Moisture 1-2 m below sfc
+TMPsoil10  0 11,112,2600   Soil Temperature 10-40 cm below sfc
+TMPsoil40 0 11,112,10340   Soil Temperature 40-100 cm below sfc
+TMPsoil100 0 11,112,25800  Soil Temperature 1-2 m below sfc
+HGTPV34768 0 7,117,32770     Geopotential Height on Potential Vorticity Surface -2 10^-6 K m^2 / kgs [gpm]
+HGTPV2     0 7,117,2         Geopotential Height on Potential Vorticity Surface 2 10^-6 K m^2 / kgs [gpm]
+TMPPV34768 0 11,117,32770    Air Temperature of Potential Vorticity Surface -2 10^-6 K m^2 / kgs [K]
+TMPPV2     0 11,117,2        Air Temperature of Potential Vorticity Surface 2 10^-6 K m^2 / kgs [K]
+PSPV34768  0 1,117,32770     Pressure of Potential Vorticity Surface -2 10^-6 K m^2 / kgs [pa]
+PSPV2      0 1,117,2         Pressure of Potential Vorticity Surface 2 10^-6 K m^2 / kgs [Pa]
+VSHPV34768 0 136,117,32770   Vertical Speed Shear on Potential Vorticity Surface -2 10^-6 K m^2 / kgs [1/s]
+VWSHPV2    0 136,117,2       Vertical Speed Shear on Potential Vorticity Surface 2 10^-6 K m^2 / kgs [1/s]
+UPV34768   0 33,117,32770    U-Wind on Potential Vorticity Surface -2 10^-6 K m^2 / kgs [m/s]
+UPV2       0 33,117,2        U-Wind on Potential Vorticity Surface 2 10^-6 K m^2 / kgs [m/s]
+VPV34768   0 34,117,32770    V-Wind on Potential Vorticity Surface -2 10^-6 K m^2 / kgs [m/s]
+VPV2       0 34,117,2        V-Wind on Potential Vorticity Surface 2 10^-6 K m^2 / kgs [m/s]
+ENDVARS
+*
+* CUSTOM FUNCTIONS * Utilized by NOMADS Web Plotter
+*
+* shaded:CFRZR:*:set gxout grfill
+* shaded:CFRZR:*:set clevs 0.5
+* shaded:CFRZR:*:set ccols 99 2
+* shaded:CICEP:*:set gxout grfill
+* shaded:CICEP:*:set clevs 0.5
+* shaded:CICEP:*:set ccols 99 2
+* shaded:CSNOW:*:set gxout grfill
+* shaded:CSNOW:*:set clevs 0.5
+* shaded:CSNOW:*:set ccols 99 2
+* shaded:CRAIN:*:set gxout grfill
+* shaded:CRAIN:*:set clevs 0.5
+* shaded:CRAIN:*:set ccols 99 2
+*
+* function:precip type:1:oCRAIN+2*oCFRZR+3*oCICEP+4*oCSNOW:precip type 1=rain 2=freezing rain 3=ice pellets 4=snow
+* shaded:precip type:*:set gxout grfill
+* shaded:precip type:*:set ccols 99 36 2 45 85 3
+* shaded:precip type:*:set clevs 0.5 1.5 2.5 3.5
+* title:precip type:rain=1 freezing rain=2 ice=3 snow=4 $hour $day$month$year
+*
+* shaded:LAND:*:set gxout grfill
+* shaded:LAND:*:set clevs 0.5
+* shaded:LAND:*:set ccols 4 15
+*
+* function:isotach (m/s):26:mag(ugrd,vgrd):wind speed (m/s)
+*
+* plot:winds:16:isotachs (m/s) and wind vectors
+* title:winds:isotachs (m/s) $level mb $dayofweek $hour $day$month$year
+* display:winds:set gxout shaded
+* display:winds:d mag(UGRD,VGRD)
+* display:winds:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds:set ccolor 98
+* display:winds:run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd vgrd
+*
+* plot:winds 10m:1:10 meter isotachs (m/s) and wind vectors
+* title:winds 10m:10 m isotachs (m/s) $dayofweek $hour $day$month$year
+* display:winds 10m:set gxout shaded
+* display:winds 10m:d mag(UGRD10m,VGRD10m)
+* display:winds 10m:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds 10m:set ccolor 98
+* display:winds 10m:run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd10m vgrd10m
+*
+* plot:winds B/W:16:isotachs (m/s) and wind vectors
+* title:winds B/W:isotachs (m/s) $level mb $dayofweek $hour $day$month$year
+* display:winds B/W:set ccolor 98
+* display:winds B/W:set gxout contour
+* display:winds B/W:d mag(UGRD,VGRD)
+* display:winds B/W:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds B/W:set ccolor 98
+* display:winds B/W:run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd vgrd
+*
+* plot:winds 10m B/W:1:10 meter isotachs (m/s) and wind vectors
+* title:winds 10m B/W:10 m isotachs (m/s) $dayofweek $hour $day$month$year
+* display:winds 10m B/W:set ccolor 98
+* display:winds 10m B/W:set gxout contour
+* display:winds 10m B/W:d mag(UGRD10m,VGRD10m)
+* display:winds 10m B/W:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds 10m B/W:set ccolor 98
+* display:winds 10m B/W:run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd10m vgrd10m
+*
+* plot:winds (knots):16:isotachs (knots) and wind vectors
+* title:winds (knots):isotachs (knot) $level mb $dayofweek $hour $day$month$year
+* display:winds (knots):set gxout shaded
+* display:winds (knots):d mag(UGRD,VGRD)*1.94254
+* display:winds (knots):run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds (knots):set ccolor 98
+* display:winds (knots):run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd*1.94254 vgrd*1.94245
+*
+* plot:winds 10m (knots):1:10 meter isotachs (knots) and wind vectors
+* title:winds 10m (knots):10 m isotachs (knot) $dayofweek $hour $day$month$year
+* display:winds 10m (knots):set gxout shaded
+* display:winds 10m (knots):d mag(UGRD10m,VGRD10m)*1.94254
+* display:winds 10m (knots):run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds 10m (knots):set ccolor 98
+* display:winds 10m (knots):run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd10m*1.94254 vgrd10m*1.94245
+*
+* plot:winds B/W (knots):16:isotachs (knots) and wind vectors
+* title:winds B/W (knots):isotachs (knot) $level mb $dayofweek $hour $day$month$year
+* display:winds B/W (knots):set ccolor 98
+* display:winds B/W (knots):set gxout contour
+* display:winds B/W (knots):d mag(UGRD,VGRD)*1.94254
+* display:winds B/W (knots):run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds B/W (knots):set ccolor 98
+* display:winds B/W (knots):run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd*1.94254 vgrd*1.94245
+*
+* plot:winds 10m B/W (knots):1:10 meter isotachs (knots) and wind vectors
+* title:winds 10m B/W (knots):10 m isotachs (knot) $dayofweek $hour $day$month$year
+* display:winds 10m B/W (knots):set ccolor 98
+* display:winds 10m B/W (knots):set gxout contour
+* display:winds 10m B/W (knots):d mag(UGRD10m,VGRD10m)*1.94254
+* display:winds 10m B/W (knots):run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:winds 10m B/W (knots):set ccolor 98
+* display:winds 10m B/W (knots):run /usr/local/grads/grads-1.9b4/bin/d_uv.gs ugrd10m*1.94254 vgrd10m*1.94245
+*
+* plot:HGT&AbsVort:17:height (gpm) and absolute vorticity (1e-6/s)
+* title:HGT&AbsVort:Height and Abs Vort $level mb $dayofweek $hour $day$month$year
+* display:HGT&AbsVort:set csmooth on
+* display:HGT&AbsVort:d ABSV*1000000
+* display:HGT&AbsVort:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:HGT&AbsVort:set gxout contour
+* display:HGT&AbsVort:set cthick 5
+* display:HGT&AbsVort:set ccolor 98
+* display:HGT&AbsVort:d HGT
+*
+* plot:RH&Omega:17:Relative Humidity (%) and Omega (dp/dt) (Pa/s)
+* title:RH&Omega:RH and Omega $level mb $dayofweek $hour $day$month$year
+* display:RH&Omega:d VVEL
+* display:RH&Omega:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:RH&Omega:set gxout contour
+* display:RH&Omega:set ccolor 98
+* display:RH&Omega:set cint 20
+* display:RH&Omega:d RH
+*
+* function:1000-500 Thickness:1:hgt(lev=500)-hgt(lev=1000):Thickness of the 500-1000mb layer (m)
+* title:1000-500 Thickness:1000-500 thickness $dayofweek $hour $day$month$year
+*
+* plot:msl&thick:1:mean sea level pressure (mb) and 1000-500 thickness (m)
+* title:msl&thick:MSLP and 1000-500 thickness $dayofweek $hour $day$month$year
+* display:msl&thick:set gxout contour
+* display:msl&thick:set csmooth on
+* display:msl&thick:set cthick 5
+* display:msl&thick:set ccolor 2
+* display:msl&thick:set cint 5
+* display:msl&thick:d PRMSL/100
+* display:msl&thick:set cthick 4
+* display:msl&thick:set ccolor 98
+* display:msl&thick:set cint 50
+* display:msl&thick:d HGT(lev=500)-HGT(lev=1000)
+* display:msl&thick:set cthick 5
+* display:msl&thick:set ccolor 59
+* display:msl&thick:set cint 5400
+* display:msl&thick:d HGT(lev=500)-HGT(lev=1000)
+*
+* plot:msl 0,12hr:1:mean sea level pressure (mb), t=0,12hr
+* title:msl 0,12hr:MSLP $hour$day$month$year (shaded) +12hr (lines)
+* display:msl 0,12hr:set cthick 5
+* display:msl 0,12hr:set ccolor 2
+* display:msl 0,12hr:d PRMSL/100
+* display:msl 0,12hr:set gxout contour
+* display:msl 0,12hr:d PRMSL/100
+* display:msl 0,12hr:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:msl 0,12hr:set gxout contour
+* display:msl 0,12hr:set cthick 1
+* display:msl 0,12hr:set ccolor 98
+* display:msl 0,12hr:d PRMSL(t+4)/100
+*
+* plot:WNDPV2:0:Total Wind Velocity on Potential Vorticity Surface 2 [m/s]
+* title:WNDPV2:Wind Speed on PV=2 surface [m/s]
+* display:WNDPV2:d mag(UPV2,VPV2)
+* display:WNDPV2:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+*
+* plot:WNDPV32770:0:Total Wind Velocity on Potential Vorticity Surface 32770 [m/s]
+* title:WNDPV32770:Wind Speed on PV=32770 surface [m/s]
+* display:WNDPV32770:d mag(UPV32770,VPV32770)
+* display:WNDPV32770:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+*
+* function:precip 0-6hr:1:smth9(apcp(t=3)):smoothed precip (mm)
+* title:precip 0-6hr:precip 0-6hr (mm)
+*
+* function:precip 6-12hr:1:smth9(apcp(t=5)):smoothed precip (mm)
+* title:precip 6-12hr:precip 6-12hr (mm)
+*
+* function:precip 12-18hr:1:smth9(apcp(t=7)):smoothed precip (mm)
+* title:precip 12-18hr:precip 12-18hr (mm)
+*
+* function:precip 18-24hr:1:smth9(apcp(t=9)):smoothed precip (mm)
+* title:precip 18-24hr:precip 18-24hr (mm)
+*
+* function:precip 24-30hr:1:smth9(apcp(t=11)):smoothed precip (mm)
+* title:precip 24-30hr:precip 24-30hr (mm)
+*
+* function:precip 30-36hr:1:smth9(apcp(t=13)):smoothed precip (mm)
+* title:precip 30-36hr:precip 30-36hr (mm)
+*
+* function:precip 36-42hr:1:smth9(apcp(t=15)):smoothed precip (mm)
+* title:precip 36-42hr:precip 36-42hr (mm)
+*
+* function:precip 42-48hr:1:smth9(apcp(t=17)):smoothed precip (mm)
+* title:precip 42-48hr:precip 42-48hr (mm)
+*
+* function:precip 0-12hr:1:smth9(apcp(t=3)+apcp(t=5)):smoothed precip (mm)
+* title:precip 0-12hr:precip 0-12hr (mm)
+*
+* function:precip 12-24hr:1:smth9(apcp(t=7)+apcp(t=9)):smoothed precip (mm)
+* title:precip 12-24hr:precip 12-24hr (mm)
+*
+* function:precip 24-36hr:1:smth9(apcp(t=11)+apcp(t=13)):smoothed precip (mm)
+* title:precip 24-36hr:precip 24-36hr (mm)
+*
+* function:precip 36-48hr:1:smth9(apcp(t=15)+apcp(t=17)):smoothed precip (mm)
+* title:precip 36-48hr:precip 36-48hr (mm)
+*
+* function:precip 48-60hr:1:smth9(apcp(t=19)+apcp(t=21)):smoothed precip (mm)
+* title:precip 48-60hr:precip 48-60hr (mm)
+*
+* function:precip 60-72hr:1:smth9(apcp(t=23)+apcp(t=25)):smoothed precip (mm)
+* title:precip 60-72hr:precip 60-72hr (mm)
+*
+* init:CPRAT:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:PRATE:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:CPRAT:1:(1+mask10)*ocprat-const(mask10*ocprat(t-1),0,-u):Convective precipitation rate [kg/m^2/s]
+* function:PRATE:1:(1+mask10)*oprate-const(mask10*oprate(t-1),0,-u):Precipitation rate [kg/m^2/s]
+*
+* function:LHTFL:1:(1+mask10)*olhtfl-const(mask10*olhtfl(t-1),0,-u):Latent heat flux [W/m^2]
+* init:LHTFL:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+*
+* function:SHTFL:1:(1+mask10)*oshtfl-const(mask10*oshtfl(t-1),0,-u):Sensible heat flux [W/m^2]
+* init:SHTFL:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+*
+* init:DLWRFsfc:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:DSWRFsfc:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:USWRFsfc:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:ULWRFsfc:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:USWRFtoa:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:ULWRFtoa:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+*
+* function:DLWRFsfc:1:(1+mask10)*odlwrfsfc-const(mask10*odlwrfsfc(t-1),0,-u):surface Downward long wave flux [W/m^2]
+* function:DSWRFsfc:1:(1+mask10)*odswrfsfc-const(mask10*odswrfsfc(t-1),0,-u):surface Downward short wave flux [W/m^2]
+* function:ULWRFsfc:1:(1+mask10)*oulwrfsfc-const(mask10*oulwrfsfc(t-1),0,-u):surface Upward long wave flux [W/m^2]
+* function:USWRFsfc:1:(1+mask10)*ouswrfsfc-const(mask10*ouswrfsfc(t-1),0,-u):surface Upward short wave flux [W/m^2]
+* function:ULWRFtoa:1:(1+mask10)*oulwrftoa-const(mask10*oulwrftoa(t-1),0,-u):top of atmos Upward long wave flux [W/m^2]
+* function:USWRFtoa:1:(1+mask10)*ouswrftoa-const(mask10*ouswrftoa(t-1),0,-u):top of atmos Upward short wave flux [W/m^2]
+*
+* init:TCDCclm:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TCDCbcl:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TCDClcl:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TCDCmcl:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TCDChcl:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TCDCcvl:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+*
+* function:TCDCclm:1:(1+mask10)*oTCDCclm-const(mask10*oTCDCclm(t-1),0,-u):atmos column cloud cover [%]
+* function:TCDCbcl:1:(1+mask10)*oTCDCbcl-const(mask10*oTCDCbcl(t-1),0,-u):boundary cloud layer cloud cover [%]
+* function:TCDClcl:1:(1+mask10)*oTCDClcl-const(mask10*oTCDClcl(t-1),0,-u):low cloud layer cloud cover [%]
+* function:TCDCmcl:1:(1+mask10)*oTCDCmcl-const(mask10*oTCDCmcl(t-1),0,-u):mid cloud layer cloud cover [%]
+* function:TCDChcl:1:(1+mask10)*oTCDChcl-const(mask10*oTCDChcl(t-1),0,-u):high cloud layer cloud cover [%]
+* function:TCDCcvl:1:(1+mask10)*oTCDCcvl-const(mask10*oTCDCcvl(t-1),0,-u):convective cloud layer cloud cover [%]
+*
+* init:TMPlct:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TMPmct:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* init:TMPhct:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:TMPlct:1:(1+mask10)*oTMPlct-const(mask10*oTMPlct(t-1),0,-u):low cloud top Temp. [K]
+* function:TMPmct:1:(1+mask10)*oTMPmct-const(mask10*oTMPmct(t-1),0,-u):mid cloud top Temp. [K]
+* function:TMPhct:1:(1+mask10)*oTMPhct-const(mask10*oTMPhct(t-1),0,-u):high cloud top Temp. [K]
+*
+* init:WATR:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:WATR:1:(1+mask10)*oWATR-const(mask10*oWATR(t-1),0,-u):Water runoff [kg/m^2]
+*
+* init:PEVPR:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:PEVPR:1:(1+mask10)*oPEVPR-const(mask10*oPEVPR(t-1),0,-u):Potential evaporation rate [W/m^2]
+*
+* init:CWORKclm:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:CWORKclm:1:(1+mask10)*oCWORKclm-const(mask10*oCWORKclm(t-1),0,-u):atmos column Cloud work function [J/kg]
+*
+* init:UFLX:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:UFLX:1:(1+mask10)*oUFLX-const(mask10*oUFLX(t-1),0,-u):surface Zonal momentum flux [N/m^2]
+* init:VFLX:run /usr/local/grads/grads-1.9b4/bin/mask10.gs
+* function:VFLX:1:(1+mask10)*oVFLX-const(mask10*oVFLX(t-1),0,-u):surface Meridional momentum flux [N/m^2]
+*
+* function:HGT Fcst-Verf:17:HGT.1-HGT.2:geopotential height (m) Forecast - Verification
+* title:HGT Fcst-Verf:$level mb HGT Fcst - Verf $dayofweek $hour $day$month$year
+* init:HGT Fcst-Verf:open $verification/analysis.ctl
+*
+* plot:HGT Fcst&Verf:17:geopotential height (m) Forecast and Verification
+* title:HGT Fcst&Verf:$level mb HGT Fcst(red), Verf $dayofweek $hour $day$month$year
+* display:HGT Fcst&Verf:set gxout contour
+* display:HGT Fcst&Verf:set csmooth on
+* display:HGT Fcst&Verf:set cthick 5
+* display:HGT Fcst&Verf:set ccolor 2
+* display:HGT Fcst&Verf:d HGT.1
+* init:HGT Fcst&Verf:open $verification/analysis.ctl
+* display:HGT Fcst&Verf:set gxout contour
+* display:HGT Fcst&Verf:set cthick 5
+* display:HGT Fcst&Verf:set ccolor 98
+* display:HGT Fcst&Verf:d HGT.2
+*
+* function:PRMSL Fcst-Verf:1:(PRMSL.1-PRMSL.2)/100:msl pressure (mb) Forecast - Verification
+* title:PRMSL Fcst-Verf:MSL Prs Fcst - Verf $dayofweek $hour $day$month$year
+* init:PRMSL Fcst-Verf:open $verification/analysis.ctl
+*
+* plot:PRMSL Fcst&Verf:1:msl pressure (mb) Forecast and Verification
+* title:PRMSL Fcst&Verf:MSL Prs Fcst(red), Verf $dayofweek $hour $day$month$year
+* display:PRMSL Fcst&Verf:set gxout contour
+* display:PRMSL Fcst&Verf:set csmooth on
+* display:PRMSL Fcst&Verf:set cthick 5
+* display:PRMSL Fcst&Verf:set ccolor 2
+* display:PRMSL Fcst&Verf:d PRMSL.1/100
+* init:PRMSL Fcst&Verf:open $verification/analysis.ctl
+* display:PRMSL Fcst&Verf:set gxout contour
+* display:PRMSL Fcst&Verf:set cthick 5
+* display:PRMSL Fcst&Verf:set ccolor 98
+* display:PRMSL Fcst&Verf:d PRMSL.2/100
+*
+* function:TMP Fcst-Verf:17:TMP.1-TMP.2:temperature (C) Forecast - Verification
+* title:TMP Fcst-Verf:$level mb TMP Fcst - Verf $dayofweek $hour $day$month$year
+* init:TMP Fcst-Verf:open $verification/analysis.ctl
+*
+* plot:TMP Fcst&Verf:17:temperature (C) Forecast and Verification
+* title:TMP Fcst&Verf:$level mb TMP Fcst(red), Verf $dayofweek $hour $day$month$year
+* display:TMP Fcst&Verf:set gxout contour
+* display:TMP Fcst&Verf:set csmooth on
+* display:TMP Fcst&Verf:set cthick 5
+* display:TMP Fcst&Verf:set ccolor 2
+* display:TMP Fcst&Verf:d TMP.1-273.16
+* init:TMP Fcst&Verf:open $verification/analysis.ctl
+* display:TMP Fcst&Verf:set gxout contour
+* display:TMP Fcst&Verf:set cthick 5
+* display:TMP Fcst&Verf:set ccolor 98
+* display:TMP Fcst&Verf:d TMP.2-273.16
+*
+* function:TMP2m Fcst-Verf:1:TMP2m.1-TMP2m.2:2 meter temperature (C) Forecast - Verification
+* title:TMP2m Fcst-Verf:2m TMP Fcst - Verf $dayofweek $hour $day$month$year
+* init:TMP2m Fcst-Verf:open $verification/analysis.ctl
+* 
+* plot:TMP2m Fcst&Verf:1:2 meter temperature (C) Forecast and Verification
+* title:TMP2m Fcst&Verf:2m TMP Fcst(red), Verf $dayofweek $hour $day$month$year
+* display:TMP2m Fcst&Verf:set gxout contour
+* display:TMP2m Fcst&Verf:set csmooth on
+* display:TMP2m Fcst&Verf:set cthick 5
+* display:TMP2m Fcst&Verf:set ccolor 2
+* display:TMP2m Fcst&Verf:d TMP2m.1-273.16
+* init:TMP2m Fcst&Verf:open $verification/analysis.ctl
+* display:TMP2m Fcst&Verf:set gxout contour
+* display:TMP2m Fcst&Verf:set cthick 5
+* display:TMP2m Fcst&Verf:set ccolor 98
+* display:TMP2m Fcst&Verf:d TMP2m.2-273.16
+*
+* Temperature Advection
+*
+* plot:tadv:29:Horizontal Temperature Advection [K/hr]
+* title:tadv:Horizontal Temperature Advection [K/hr]
+* display:tadv:define dtx = cdiff(TMP,x)
+* display:tadv:define dty = cdiff(TMP,y)
+* display:tadv:define dx = cdiff(lon,x)*3.1416/180
+* display:tadv:define dy = cdiff(lat,y)*3.1416/180
+* display:tadv:set cint 0.25
+* display:tadv:set cmin -4
+* display:tadv:set cmax 4
+* display:tadv:display 3600 * (-1*( (UGRD*dtx)/(cos(lat*3.1416/180)*dx) + VGRD*dty/dy )/6.37e6)
+* display:tadv:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+*
+* Wind convergence
+*
+* plot:conv:29:Horizontal Convergence [100000/s]
+* title:conv:Horizontal Convergence [100000/s]
+* display:conv:define diverg = hdivg(UGRD,VGRD)
+* display:conv:set cint 1
+* display:conv:display -100000 * diverg
+* display:conv:run /usr/local/grads/grads-1.9b4/bin/cbar98.gs
+* display:conv:set gxout vector
+* display:conv:set rgb 98 1 1 1
+* display:conv:set ccolor 98
+* display:conv:display skip(UGRD,2);skip(VGRD,2)
+*
+* End of custom expressions

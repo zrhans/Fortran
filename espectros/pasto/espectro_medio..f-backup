@@ -1,0 +1,90 @@
+      program Calculo_med
+c
+c
+c
+c
+c
+c
+c
+c
+c
+ !PARAMETER(NN=$L,M=$BANDAS)
+      
+
+C     PARAMETER(N=16384,NN=524288,KK=1800,K=8192,M=22)
+
+
+C     COMECANDO A LER O ARQUIVO DE ENTRADA
+C	
+
+	
+      i=1
+      OPEN(UNIT=54,FILE='PSWS1M.DAT')
+      OPEN(UNIT=10,FILE='MPSWS1M.DAT')
+
+c
+C
+C
+      DO
+         READ(54,*,END=10)(DATA(i,J),J=1,4)
+         i=i+1
+      ENDDO
+10    CONTINUE
+      i=i-1
+C
+      PRINT*,'LEU O ARQUIVO'
+      write(*,*)i
+	
+C	CALCULO DA SOMA DAS COLUNAS DE ESPECTRO DE SV, SU, SW E ST
+ 
+      WRITE (*,*)'ENTRADA'
+      K=0;x=1;t=0;
+      m=0
+	do m=1,B
+      SSv(m)=0.;SSu(m)=0.;SSw(m)=0.;fm(m)=0.;
+      MSv(m)=0.;MSu(m)=0.;MSw(m)=0.;Mfm(m)=0.;
+      enddo
+    	open(unit=30, file='analasie')
+ 20   continue
+         
+         
+
+C	CALCULO DA SOMA DOS ESPECTROS DE SV,SU,SW,ST
+	
+        DO 47 M=1,B 
+	   fm(m)=fm(m)+data(m+k,1)
+	   SSu(m)=SSu(m)+data(m+k,2)
+         SSv(m)=SSv(m)+data(m+k,3)
+         SSw(m)=SSw(m)+data(m+k,4)
+ 47      CONTINUE
+         write(30,*)'k-> ',k,' i-> ',i
+        
+ 49   continue
+      k=k+B
+      IF (K.GE.L) then
+      GOTO 5 
+      else 
+         t=t+1
+         goto 20
+      endif
+ 5    continue
+	close(30)
+
+C     CALCULO DA MEDIA DOS ESPECTROS DE Su,Sv,Sw e ST 
+      DO 51 M=1,B
+      MSv(M)=SSv(M)/t
+      MSu(M)=SSu(M)/t
+      MSw(M)=SSw(M)/t
+      Mfm(M)=fm(M)/t
+ 51   CONTINUE
+C     ESCREVENDO ARQUIVOS DE SAIDA
+      do 50 x=1,B
+	WRITE(*,*)'I         f            Su         Sv         Sw'
+         WRITE(*,*)x,'>',Mfm(x),MSv(x),MSu(x),MSw(x)
+         WRITE(10,100)Mfm(x),MSv(x),MSu(x),MSw(x)
+ 100     format(F13.6,1X,F12.5,1x,F12.5,1x,F12.5)
+ 50      continue  
+  
+      
+      END
+      

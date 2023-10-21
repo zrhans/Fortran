@@ -1,0 +1,248 @@
+#!/bin/bash
+#versio for web
+clear
+# path=`pwd`#usar este quando a exe4cucao é normal em terminal no proprio pc
+	path="/home/hans/public_html/microm/micweb2006/hans/pasto/runSPC" #web
+	buceta=$1
+cd $path
+	graficos="graficos";data="data";spcdia="spcdia";
+	spcmes="spcmes";usados="usados";spcmedio="meanspc";
+	freq="frequencias"
+
+########################################################################
+###
+# Sele�o de a�es p o aplicativo      #
+########################################################################
+
+mediasspc()
+{
+cd spcmes
+filetoremove='spcmedio.sh'
+remfile
+filetoremove='espectro_medio.f'
+remfile
+ln -s ../../espectro_medio.f
+ln -s ../../spcmedio.sh
+#por aqui om box com pedido de numero de bandas para a media
+bandas="44"
+ls ?????-??C?-* ?????-??S?-* >xi
+xii=`wc -l xi | awk '{print $1}'`
+rm -f xi
+step=`expr 100 / $xii`
+compteur="1"
+#step=`expr 100 / 16`
+echo "$compteur" ; 
+for x in `ls ?????-??C?-* ?????-??S?-*`
+do
+clear
+echo "<blink><font color=red> Executando: $x ( $compteur de $xii)</font> </blink><br>";
+./spcmedio.sh $x $bandas
+compteur=`expr $compteur + 1`
+done; 
+cd ..
+exit;
+return
+}
+
+
+consist()
+{
+grep -c '*' spcmes/*S* >logconsist.micr
+resultado=`cat logconsist.micr`
+$DIALOG --title "Consistencia: " --tailbox "$resultado" 24 64
+case $? in
+  0)
+    echo "OK."
+    acoes
+    ;;
+  1)
+    echo "Cancel pressed.";;
+  255)
+    echo "Box closed.";;
+esac
+return
+}
+
+montapastas()
+{
+if [ -d "$path/$graficos" ]; then
+  echo "Verificando: \\n $path/$graficos ..." 
+  else
+  mkdir "$path/$graficos"
+  echo "Criando: \\n $path/$graficos ..." 
+fi
+if [ -d "$path/$freq" ]; then
+  echo "Verificando: \\n $path/$freq ..." 
+  else
+  mkdir "$path/$freq"
+  echo "Criando: \\n $path/$freq ..." 
+fi
+if [ -d "$path/$data" ]; then
+  echo "Verificando: \\n $path/$data ..." 
+  else
+  mkdir "$path/$data"
+  echo "Criando: \\n $path/$data ..." 
+fi
+if [ -d "$path/$usados" ]; then
+  echo "Verificando: \\n $path/$usados ..." 
+  else
+  mkdir "$path/$usados"
+  echo "Criando: \\n $path/$usados ..." 
+fi
+if [ -d "$path/$spcmes" ]; then
+  echo "Verificando: \\n $path/$spcmes ..." 
+  else
+  mkdir "$path/$spcmes"
+  echo "Criando: \\n $path/$spcmes ..." 
+fi
+if [ -d "$path/$spcdia" ]; then
+  echo "Verificando: \\n $path/$spcdia ..." 
+  else
+  mkdir "$path/$spcdia"
+  echo "Criando: \\n $path/$spcdia ..." 
+fi
+if [ -d "$path/$spcmedio" ]; then
+  echo "Verificando: \\n $path/$spcmedio ..." 
+  else
+  mkdir "$path/$spcmedio"
+  echo "Criando $path/$spcmedio ..." 
+fi
+return
+}
+verifica()
+{
+ if [ -f $path/$status ]; then
+ echo "Verificando $path/$status ..."
+ else
+ echo "Verificando $path/$status ...FAILED !!!!!"
+ fi
+return
+}
+extrai()
+{
+ echo " --[ extraindo $filegz ]--"
+ gunzip $filegz
+return
+}
+comprime()
+{
+echo "--[ comprimindo $file ]--"
+gzip $file
+if [ -f $filegz ]; then
+cp $filegz usados/
+ echo " comprimido e movido para pasta usados ... "
+else
+echo " falha de compress?o ...FAILED" 
+fi
+return
+}
+remfile()
+{
+if [ -f $filetoremove ]; then
+  echo " existe $filetoremove removendo ..."
+  rm -f $filetoremove
+  else
+  echo " nao existe $filetoremove"
+fi
+return
+}
+
+
+# ajusta_nome() <- pega os arquivos que come�m com S
+# e adiciona o prefixo F (filtrado) e a extens� de acordo
+# com o dia de dados calculados. Fxxxx.Dxx e apenda
+
+ajusta_apenda(){
+for spc in S* 
+do
+classe=`echo $spc | cut -c1-4`
+ano_mes=`echo $file | cut -c1-7`
+# transforma o recem calculado com novo nome
+mv $spc $CAS-$classe-$ano_mes.D$dia
+# apenda arquivos de espectros de acordo com a classe de estabilidade
+cat $CAS-$classe-$ano_mes.D$dia >> $spcmes/$CAS-$classe-$ano_mes.spc
+mv $CAS-$classe-$ano_mes.D$dia $spcdia/
+#mv *.D$dia data/
+#rm -f GE*
+done
+return
+}
+executar()
+{
+total=`ls *.dat.gz | wc -l`
+step=`expr 100 / $total`
+num=0
+montapastas
+echo "$compteur" ; #sleep 1
+	for filegz in *.dat.gz
+	do
+        if [ $num -ge 2  ]; then 
+	clear
+	 fi
+        num=$((num + 1)) 
+	extrai
+	c=$buceta
+	file=`echo $filegz | cut -c 1-14`
+	dia=`echo $file | cut -c9-10`
+	filetoremove="INPUT.DAT"
+	CAS=`echo $c | cut -c1-5`
+	nome=$file
+	echo "<table align=center border=1 cellspacing=0><TR color=navy align=center><TD align=center>"
+	echo "VAR</td><td>ARGS</td></TR>"
+cel="<tr><td align=left>"
+echo "$cel Executalvel</td><td>$c</td></tr>"
+echo "$cel Arquivo gz</td><td>$filegz</td></TR>"
+echo "$cel Dia</td><td>$dia</td></TR>"
+echo "$cel Remover</td><td>$filetoremove</td></TR>"
+echo "$cel CASO</td><td>$CAS</td></TR>"
+echo "$cel Arquivo dat</td><td>$nome</td></TR></table>"
+
+	dia=`echo $file | cut -c9-10`
+	filetoremove="INPUT.DAT"
+	CAS=`echo $c | cut -c1-5`
+	nome=$file
+
+        running="$c running $file "
+	remfile
+	echo "carregando dados... "
+	cp $file INPUT.DAT
+        echo "OK "
+# executando o programa em fortran
+	echo "<h3><font color=red><blink> $running... </blink>($num de $total) </font><font color=black></font></h3> "
+	./$c
+	echo "...finalizado!"
+	comprime
+	ajusta_apenda
+	done;
+echo "($num de $total)"
+echo "<h2>$0 FINALIZADO.</h2>"
+return
+}
+
+menu()
+{
+c="$1"
+datas=`date`
+echo "dentro do menu..."
+echo "
+		EXECUTAR)executar;;
+		MEDIAS)mediasspc;;
+		LIMPEZA)./limpa;;
+		FIM)clear exit 1;;
+"
+ executar
+ mediasspc
+exit;
+return
+}
+
+if [ $# -ne 1 ]; then
+
+ echo "";echo "Usage: $0 filename";echo ""
+ echo " $USER! Digite o nome do arquivo em fortran para executar."
+ echo " Exemplo: $0 programa.x77";echo ""
+ else
+clear
+menu
+
+fi

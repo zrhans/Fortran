@@ -1,0 +1,10 @@
+set encoding iso_8859_1
+#set term postscript enhanced color "arial"
+#set output 'spc-dia.eps'
+set title 'Spectro de u Diário - xx/09/2005 - gill/k77/STM/PA'
+set xlabel 'f'
+set ylabel 'Calor Sensível [W/m²]'
+set logscale
+p[][] 'R1SCC1.D20' u 12:13 t 'raw' w lp, 'F1SCC1.D20' t 'FDR' w lp  
+
+pause(-1)

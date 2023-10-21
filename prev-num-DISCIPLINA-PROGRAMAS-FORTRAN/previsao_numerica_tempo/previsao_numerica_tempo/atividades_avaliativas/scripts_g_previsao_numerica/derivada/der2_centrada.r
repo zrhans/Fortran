@@ -1,0 +1,20 @@
+der2.centrada <- function(psi, dx)
+{
+ddpsiloc <- NA
+im <- length(psi)
+
+for( i in 1:(im))
+{
+# if(i == 1){ddpsi[i] <- (psi[i+1]+psi[im]-2*psi[i])/(dx^2)}
+if(i != im)
+{
+ddpsi[i+1] <- (psi[i+1]+psi[i-1]-2*psi[i])/(dx^2)
+}
+else
+{
+ddpsi[i+1] <- (psi[1]+psi[i-1]-2*psi[i])/(dx^2)
+}
+ddpsiloc <- c(ddpsiloc, ddpsi[i])
+}
+return(ddpsiloc)
+}

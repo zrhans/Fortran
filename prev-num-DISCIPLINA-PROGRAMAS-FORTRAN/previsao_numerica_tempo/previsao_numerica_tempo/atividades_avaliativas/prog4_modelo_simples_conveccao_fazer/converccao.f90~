@@ -1,0 +1,20 @@
+	program modelo_conveccao
+	implicit none
+!
+	integer, parameter :: im = 16, km = 16, tm = 6000.
+	integer :: i , k, l
+	real, dimension(im, km, tm) :: vort, teta
+	real, parameter :: dx = 3., dz = 300., dt = 30.
+	real :: du, dv, ajuste, omega_trop, soma, divm
+!
+!Condicoes iniciais
+!
+	vort(:, :, 1) = 0.
+	teta(:, :, 1) = 270.
+	teta(6:11, 1:5, 1) = 275.
+
+	do i = 1, im
+		do k = 1, km
+			print *, i, k, teta(i, k, 1)
+		enddo
+	enddo

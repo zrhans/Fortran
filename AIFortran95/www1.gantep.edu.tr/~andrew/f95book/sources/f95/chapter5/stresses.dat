@@ -1,0 +1,7 @@
+r=0.1 c=0.1
+area   =0.0314
+inertia=4.91E-6
+polar inertia=9.82E-6
+tforce =45.254
+tmoment=22.550
+ttorque=13.780

@@ -1,0 +1,169 @@
+	program modelo_conveccao
+	implicit none
+	integer, parameter :: im = 17, km = 17, nm = 121, lminm = nm/20
+	integer :: i , k, n, lmin
+	real, dimension(im, km, nm) :: zeta, teta, psi, u, w
+	real, dimension(im, km, nm) :: dif_teta_x, dif_teta_z, dif_zeta_x, dif_zeta_z, dif_zeta_uw
+	real, dimension(im, km, lminm) :: vort_min, teta_min, psi_min, uwnd_min, wwnd_min
+	real, parameter :: dx = 3000., dz = 300., dt = 30., g = 9.81, teta0 = 270., dx2 = dx*dx, dz2 = dz*dz
+	integer :: chave, cont, irec
+	real :: var_maior
+	real, dimension(im, km) :: auxteta, auxu, auxw
+!
+!Condicoes iniciais
+!
+	open(1, file = 'conveccao_seca.bin', status = 'unknown', form = 'unformatted', access = 'direct',&
+	action = 'write', recl = 3*4*im*km)
+!
+	zeta(:, :, 1) = 0.; zeta(1, :, :) = 0.; zeta(im, :, :) = 0.; zeta(:, 1, :) = 0.; zeta(:, km, :) = 0.
+	teta(:, :, 1) = 270.; teta(1, :, :) = 270.; teta(im, :, :) = 270.; teta(:, 1, :) = 270.; teta(:, km, :) = 270.
+	teta(7:11, 1:2, 1) = 275.
+	psi(:, :, 1) = 0.
+	u(:, :, 1) = 0.
+	w(:, :, 1) = 0.
+!
+	do i = 1, im
+		do k = 1, km
+			auxteta(i, k) = teta(i, k, 1)
+			auxu(i, k) = u(i, k, 1)
+			auxw(i, k) = w(i, k, 1)
+		enddo
+	enddo
+!
+	irec = 1
+	write(1, rec = irec)auxteta, auxu, auxw
+!
+!!!!!!!!!!!!!!!!!!
+!Passo de tempo 2!
+!!!!!!!!!!!!!!!!!!
+!
+!Calculando o teta e a vort
+!Diferenca pra frente no tempo
+!
+	n = 1
+	teta(:, :, n+1) = teta(:, :, n)
+	do i = 2, im-1
+		do k = 2, km-1
+			zeta(i, k, n+1) = dt*(g/teta0)*((teta(i+1, k, n)-teta(i-1, k, n))/(2*dx))+zeta(i, k, n)
+		end do
+	end do
+!
+!Calculando o psi
+!
+	call relaxacao(psi, zeta, dx2, dz2, im, km, n+1)
+!
+!Calculando o vento u e w
+!
+	call uw(psi, dx, dz, im, km, u, w, n+1)
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!Todos os passos de tempo restantes!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!Calculando teta e vort
+!Diferenca centrada no tempo
+!
+	do n = 2, nm-1
+		do i = 2, im-1
+			do k = 2, km-1
+				dif_teta_x(i, k, n) = (teta(i+1, k, n)-teta(i-1, k, n))/(2.*dx)
+				dif_zeta_x(i, k, n) = (zeta(i+1, k, n)-zeta(i-1, k, n))/(2.*dx)
+				dif_teta_z(i, k, n) = (teta(i, k+1, n)-teta(i, k-1, n))/(2.*dz)
+				dif_zeta_z(i, k, n) = (zeta(i, k+1, n)-zeta(i, k-1, n))/(2.*dz)
+				dif_zeta_uw(i, k, n) = u(i, k, n)*dif_zeta_x(i, k, n)+w(i, k, n)*dif_zeta_z(i, k, n)
+!
+				teta(i, k, n+1) = -2.*dt*(u(i, k, n)*dif_teta_x(i, k, n)+w(i, k, n)*dif_teta_z(i, k, n))+teta(i, k, n-1)
+				zeta(i, k, n+1) = 2.*dt*((g/teta0)*dif_teta_x(i, k, n)-dif_zeta_uw(i, k, n))+zeta(i, k, n-1)
+			end do
+		end do
+!
+!Calculando o psi
+!
+		print*, n
+		call relaxacao(psi, zeta, dx2, dz2, im, km, n+1)
+!
+!Calculando o vento u e w
+!
+		call uw(psi, dx, dz, im, km, u, w, n+1)
+!
+!Escrevendo saida em intervalos de 10min
+!
+		if(mod(n, 20) == 0)then
+			do i = 1, im
+				do k = 1, km
+					auxteta(i, k) = teta(i, k, n)
+					auxu(i, k) = u(i, k, n)
+					auxw(i, k) = w(i, k, n)
+				end do
+			end do
+			irec = irec+1
+			write(1, rec = irec)auxteta, auxu, auxw
+! 			print *, 'tempo =', n, 'min'
+		end if
+	end do
+	close(1)
+!
+!Programas internos
+!
+	CONTAINS
+	subroutine relaxacao(psi, zeta, dx2, dz2, im, km, n)
+	implicit none
+	integer, intent(in) :: im, km, n
+	real, dimension(im, km, n), intent(in) :: zeta
+	real, dimension(im, km, n), intent(inout) :: psi
+	real, dimension(im, km, n) :: ddxpsi, ddzpsi, zeta_psi, res
+	real, intent(in) :: dx2, dz2
+	integer :: i, k, icont, chave
+	real :: var_maior
+!
+! 	do i = 1, im
+! 		do k = 1, km
+! 			psi(i, k, n) = psi(i, k, n-1)
+! 		enddo
+! 	enddo
+!
+	chave = 1
+	do while(chave == 1)
+		chave = 0
+		icont = icont+1
+		var_maior = 0.
+		do i = 2, im-1
+			do k = 2, km-1
+				ddxpsi(i, k, n) = (psi(i+1, k, n)+psi(i-1, k, n)-2.*psi(i, k, n))/dx2
+				ddzpsi(i, k, n) = (psi(i, k+1, n)+psi(i, k-1, n)-2.*psi(i, k, n))/dz2
+				zeta_psi(i, k, n) = ddxpsi(i, k, n)+ddzpsi(i, k, n)
+				res(i, k, n) = zeta_psi(i, k, n)-zeta(i, k, n)
+				if(abs(res(i, k, n)) > var_maior)var_maior = abs(res(i, k, n))
+			end do
+		end do
+!
+		do i = 2, im-1
+			do k = 2, km-1
+				if(var_maior > 1.0e-3)then
+					psi(i, k, n) = psi(i, k, n)+0.5*res(i, k, n)*dz2*dx2/(dz2+dx2)
+					chave = 1
+				end if
+			end do
+		end do
+	end do
+	return
+	end subroutine
+!
+	subroutine uw(psi, dx, dz, im, km, u, w, n)
+	implicit none
+	integer, intent(in) :: im, km, n
+	real, dimension(im, km, n), intent(in) :: psi
+	real, dimension(im, km, n), intent(out) :: u, w
+	real, intent(in) :: dx, dz
+	integer :: i, k
+!
+	do i = 2, im-1
+		do k = 2, km-1
+			u(i, k, n) = -1.*(psi(i, k+1, n)-psi(i, k-1, n))/(2.*dz)
+			w(i, k, n) = (psi(i+1, k, n)-psi(i-1, k, n))/(2.*dx)
+		end do
+	end do
+	return
+	end subroutine
+!
+	end program

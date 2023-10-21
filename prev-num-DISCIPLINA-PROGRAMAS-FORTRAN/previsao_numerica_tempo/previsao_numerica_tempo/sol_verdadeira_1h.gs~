@@ -1,0 +1,8 @@
+'reinit'
+'open solucao_verdadeira_1h.ctl'
+'set lon 0 1000'
+'draw title Solucao Verdadeira a cada 1h'
+'set ylab Temperatura (graus Celsius)'
+'set xlab Longitude (graus)'
+'d temp'
+'printim solucao_verdadeira_1h.jpg white'

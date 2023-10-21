@@ -1,0 +1,779 @@
+
+C=============================================================================
+C	O PARAMETRO N É AQUELE QUE PERMITE ANALISAR 12 HORAS DE DADOS DE 10.67HZ  
+C	COM SERIE       DE 25 MINUTUS (10.67HZ = 16384 LINHAS) 
+C     COM MEDIA MOVEL DE  4 MINUTOS (10.67HZ =  2560 LINHAS)
+C==============================================================================
+
+
+	USE PORTLIB
+
+	CHARACTER(8) LOCALTIME
+
+	PARAMETER (N=1728000)
+
+      INTEGER(4) S
+	CHARACTER A*1,V*1,B*1,NOME*25
+	DIMENSION A(90)
+      INTEGER INTERVALO,XSUP,XINF,LIMITE,NA
+	INTEGER GAP,JUMP
+	REAL INPUT(N,7),TURB(N,7),BRUTOS(N,7)
+	REAL SOMA(7),MEDIO(7),COR(7),VAR(7),DP(7)
+	REAL NL
+	REAL T03D
+	REAL*8 DHM
+	REAL USTAR3D,RHO,CP,SEN3D,LV,LAT3D
+	REAL TSTAR3D,MOL3D
+	REAL ECT3D,EPSON3D
+	REAL ECT3D1,ECT3D2,ECT3D3
+	REAL WIND3D,QSTAR
+	REAL UV3D(N),UW3D(N),UT3D(N),UC3D(N),UQ3D(N),VW3D(N),VT3D(N)
+	REAL VC3D(N),VQ3D(N)
+	REAL WT3D(N),WC3D(N),WQ3D(N),TC3D(N),TQ3D(N),CQ3D(N)
+
+	REAL SOMAUV3D,SOMAUW3D,SOMAUT3D,SOMAUQ3D,SOMAVW3D,SOMAVT3D
+	REAL SOMAVQ3D,SOMAWT3D,SOMAWQ3D,SOMATQ3D
+	REAL SOMAUC3D,SOMAVC3D,SOMATC3D,SOMACQ3D
+	REAL CORUV3D,CORUW3D,CORUT3D,CORUQ3D,CORVW3D,CORVT3D
+	REAL CORVQ3D,CORWT3D,CORWQ3D,CORTQ3D
+	REAL CORUC3D,CORVC3D,CORTC3D,CORCQ3D
+
+	REAL VARUV3D,VARUW3D,VARUT3D,VARUQ3D,VARVW3D,VARVT3D
+	REAL VARVQ3D,VARWT3D,VARWQ3D,VARTQ3D
+	REAL VARUC3D,VARVC3D,VARTC3D,VARCQ3D
+
+	REAL DPUV3D,DPUW3D,DPUT3D,DPUQ3D,DPVW3D,DPVT3D
+	REAL DPVQ3D,DPWT3D,DPWQ3D,DPTQ3D
+	REAL DPUC3D,DPVC3D,DPTC3D,DPCQ3D
+
+	REAL ALPHA3D,THETA3D,PSI3D
+	REAL INPUT2,INPUT3,INPUT4
+	REAL V2MEDIO3D,W2MEDIO3D,VWMEDIO3D
+	REAL V2SOMA3D,W2SOMA3D,VWSOMA3D
+	COMMON FREQCOLETA
+
+	REAL D3D,DA3D,DR3D,RDR3D
+
+	S = SYSTEM("DEL LISTA.DAT")
+	S = SYSTEM("DEL INPUT.DAT")
+	S = SYSTEM("DEL FLUXOS.DAT")
+	S = SYSTEM('CLS')
+	S = SYSTEM("DIR /ON /B *.EDDY >> LISTA.DAT")
+
+	OPEN(UNIT=19,FILE='LISTA.DAT')
+      OPEN(UNIT=21,FILE='TRATADOS.DAT')
+	OPEN(UNIT=99,FILE='CHECKLIST.DAT')
+
+	WRITE(*,*)'======================================================'
+	WRITE(*,*)'         UNIVERSIDADE FEDERAL DE SANTA MARIA          '
+	WRITE(*,*)'           LABORATÓRIO DE MICROMETEOROLOGIA           '
+	WRITE(*,*)
+	WRITE(*,*)'PROGRAMA PARA OS DADOS DO EXPERIMENTO LBA PASTURE SITE'
+	WRITE(*,*)
+	WRITE(*,*)'                ESTE PROGRAMA CALCULA                 '
+	WRITE(*,*)
+	WRITE(*,*)' 1 - ESTATISTICA DOS DADOS                            '
+	WRITE(*,*)' 2 - PARAMETROS MICROMETEOROLOGICOS                   '
+	WRITE(*,*)' 3 - ESPECTRO E CO-ESPECTRO                           '
+	WRITE(*,*)' 4 - AUTO-CORRELACAO                                  '
+	WRITE(*,*)
+	WRITE(*,*)' AMOSTRAGEM  ==>  0.1  SEGUNDOS (10 HZ)               '
+	WRITE(*,*)' MEDIA MOVEL ==>  6.82 MINUTOS  (4096)                '
+	WRITE(*,*)' SERIES COM  ==> 27.30 MINUTOS  (16384)               '
+	WRITE(*,*)
+	WRITE(*,*)' ATUALIZADO EM 22/06/2004                             '
+	WRITE(*,*)'======================================================'
+	WRITE(*,*)
+
+
+	FREQCOLETA=10.
+
+	WRITE(*,*)' CONTANDO OS ARQUIVOS NO SUB-DIRETORIO ATUAL'
+	WRITE(*,*)
+
+	NA=0
+891	CONTINUE
+	READ(19,12,END=305)R
+	NA=NA+1
+	GO TO 891
+305   CONTINUE
+	
+      CLOSE(19)
+	OPEN(UNIT=19,FILE='LISTA.DAT')
+
+	WRITE(*,97)NA
+97	FORMAT('  FORAM ENCONTRADOS ',I3.3,' ARQUIVOS')
+	WRITE(*,*)
+ 	WRITE(*,*)' GERANDO O ARQUIVO TRATADOS.DAT'
+	WRITE(*,*)'======================================================'
+	WRITE(*,*)
+
+
+	V=','
+      B=' '
+	NL=0      
+	I=0
+	J=0
+
+89	CONTINUE
+	CLOSE(20)
+	READ(19,12,END=300)NOME
+12	FORMAT(A25) 
+      OPEN(UNIT=20,FILE=NOME)
+88    I=I+1
+      READ(20,1001,END=99)A
+1001  FORMAT(90A1)
+      NL=NL+1
+	WRITE(21,1001)A
+	IF(NL.EQ.N)GOTO 300
+	GOTO 88
+99    CONTINUE
+	WRITE(*,46)NOME,I-1
+	WRITE(99,46)NOME,I-1
+46	FORMAT(2X,A25,2X,I6)
+	I=0
+	GOTO 89
+300   CONTINUE
+      CLOSE(21)
+	CLOSE(20)
+	CLOSE(19)
+	CLOSE(99)
+
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CC	DEFINE OS LIMITES DA SERIE COM EXPOENTE INTEIRO DA BASE 2   CC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+	INTERVALO=(NL*0.1)/60
+
+	WRITE(*,*)'======================================================'
+	WRITE(*,*)
+	WRITE(*,*)' LINHAS NO TRATADOS.DAT ',IFIX(NL)
+	WRITE(*,*)
+	WRITE(*,90)FLOAT(INTERVALO)/60
+90	FORMAT(2X,'CORESPONDE A ',F5.2,' HORAS DE DADOS')
+	WRITE(*,*)
+
+
+c	GAP=16384
+c	JUMP=4096
+	GAP=16384
+	JUMP=1800
+
+     	LIMITE=(NL-(GAP-JUMP))/FLOAT(JUMP)
+
+	WRITE(*,91)LIMITE
+91	FORMAT(2X,'TOTAL DE SERIES A SEREM ANALIZADAS ',I3.3)
+	WRITE(*,*)
+	
+	XINF=1
+	XSUP=GAP
+
+6	FORMAT(F12.8,1X,6F14.5)
+
+C==============================================
+C       ABRE ARQUIVOS DE SAIDAS
+C==============================================
+
+ 	OPEN(UNIT=15,FILE='MEAN_FAST.DAT')
+ 	OPEN(UNIT=16,FILE='STD_FAST.DAT')
+	OPEN(UNIT=17,FILE='MEAN_FLUX.DAT')
+	OPEN(UNIT=18,FILE='STD_FLUX.DAT')
+	OPEN(UNIT=19,FILE='MICRO_FUNC.DAT')
+
+
+C==============================================
+C      INICIA A BRINCADEIRA
+C==============================================
+C==============================================
+C     LE OS DADOS DO ARQUIVO INPUT.DAT 
+C==============================================
+
+	WRITE(*,*)
+      WRITE(*,*)' CARREGANDO O ARQUIVO INPUT.DAT NA MEMORIA'
+	WRITE(*,*)'======================================================'
+
+	WRITE(*,*)
+
+      OPEN(UNIT=11,FILE='TRATADOS.DAT')
+
+	DO 10 I=1,NL
+	READ (11,*,END=10)(BRUTOS(I,J),J=1,7)
+10    CONTINUE
+
+C==============================================
+C     DEFINE O CONTROLE DO LOOPING
+C==============================================
+	LOCALTIME = CLOCK()
+      WRITE(*,*)' COMECOU A CALCULAR AS ',LOCALTIME
+	WRITE(*,*)'======================================================'
+	WRITE(*,*)
+	WRITE(*,*)
+
+8765  CONTINUE
+
+      DO 11 K=1,LIMITE
+
+      IF(XSUP.GT.NL)GO TO 8764
+
+C========================================
+C     CALCULA A MEDIA
+C========================================
+
+	DO 3209 J=1,7
+      DO 3209 I=XINF,XSUP
+	INPUT(I,J)=BRUTOS(I,J)
+3209	CONTINUE
+
+	DO 2020 J=1,7
+	SOMA(J)=0.
+	MEDIO(J)=0.
+2020  CONTINUE 
+
+	DO 5 J=1,7
+	DO 5 I=XINF,XSUP
+	SOMA(J)=SOMA(J)+INPUT(I,J)
+5     CONTINUE
+
+	DO 3030 J=1,7
+	MEDIO(J)=SOMA(J)/(FLOAT(GAP))
+3030  CONTINUE
+	WRITE(*,*)'   U3D  V3D   '
+	WRITE(*,786)MEDIO(2),MEDIO(3)
+786	FORMAT(2X,F5.2,F5.2)
+
+C==============================================
+C	FAZ A ROTACAO DE EIXOS U E V
+C==============================================
+
+	ALPHA3D=ATAN(MEDIO(3)/MEDIO(2))
+
+      D3D=(ALPHA3D*180.)/(3.141592)
+	
+      DA3D=ABS(D3D)
+
+C=======================================================================
+
+      IF(MEDIO(2).GT.0.AND.MEDIO(3).GT.0) THEN
+      DR3D=DA3D
+      ENDIF
+
+      IF(MEDIO(2).LT.0.AND.MEDIO(3).GT.0) THEN
+      DR3D=180.-DA3D
+      ENDIF
+
+      IF(MEDIO(2).LT.0.AND.MEDIO(3).LT.0) THEN
+      DR3D=180.+DA3D
+      ENDIF
+
+      IF(MEDIO(2).GT.0.AND.MEDIO(3).LT.0) THEN
+      DR3D=360.-DA3D
+      ENDIF
+
+      RDR3D=(DR3D*3.141592)/180.
+    
+C=======================================================================
+      
+  
+      DO 513 I=XINF,XSUP
+      INPUT2=INPUT(I,2)*COS(RDR3D)+INPUT(I,3)*SIN(RDR3D)
+      INPUT3=-INPUT(I,2)*SIN(RDR3D)+INPUT(I,3)*COS(RDR3D)
+      INPUT(I,2)=INPUT2  
+      INPUT(I,3)=INPUT3
+
+513   CONTINUE
+
+
+C========================================
+C     CALCULA A MEDIA	  APOS ROTAR
+C========================================
+
+	DO 2029 J=1,7
+	SOMA(J)=0.
+	MEDIO(J)=0.
+2029  CONTINUE 
+
+	DO 53 J=1,7
+	DO 53 I=XINF,XSUP
+	SOMA(J)=SOMA(J)+INPUT(I,J)
+53    CONTINUE
+
+	DO 3310 J=1,7
+	MEDIO(J)=SOMA(J)/(FLOAT(GAP))
+3310  CONTINUE
+
+
+	
+
+C==============================================
+C	FAZ A ROTACAO DE EIXOS U E W
+C==============================================
+
+	THETA3D=ATAN(MEDIO(4)/MEDIO(2))
+
+
+ 
+      DO 523 I=XINF,XSUP
+      INPUT2=INPUT(I,2)*COS(THETA3D)+INPUT(I,4)*SIN(THETA3D)
+      INPUT4=-INPUT(I,2)*SIN(THETA3D)+INPUT(I,4)*COS(THETA3D)
+      INPUT(I,2)=INPUT2  
+      INPUT(I,4)=INPUT4
+
+523   CONTINUE
+
+
+C========================================
+C     CALCULA A MEDIA	  APOS ROTAR
+C========================================
+
+	DO 2028 J=1,7
+	SOMA(J)=0.
+	MEDIO(J)=0.
+2028  CONTINUE 
+
+	DO 531 J=1,7
+	DO 531 I=XINF,XSUP
+	SOMA(J)=SOMA(J)+INPUT(I,J)
+531   CONTINUE
+
+	DO 331 J=1,7
+	MEDIO(J)=SOMA(J)/(FLOAT(GAP))
+331   CONTINUE
+
+
+ 	V2SOMA3D=0.
+	W2SOMA3D=0.
+ 	VWSOMA3D=0.
+
+	DO 5013 I=XINF,XSUP
+ 	V2SOMA3D=V2SOMA3D+(INPUT(I,3)**2)
+	W2SOMA3D=W2SOMA3D+(INPUT(I,4)**2)
+	VWSOMA3D=VWSOMA3D+(INPUT(I,3)*INPUT(I,4))
+5013  CONTINUE
+
+	V2MEDIO3D=V2SOMA3D/FLOAT(GAP)
+	W2MEDIO3D=W2SOMA3D/FLOAT(GAP)
+	VWMEDIO3D=VWSOMA3D/FLOAT(GAP)
+
+C==============================================
+C	FAZ A ROTACAO DE EIXOS V E W
+C==============================================
+
+	PSI3D=(0.5)*(ATAN((2*VWMEDIO3D)/(V2MEDIO3D-W2MEDIO3D)))
+
+ 
+      DO 5237 I=XINF,XSUP
+      INPUT3=INPUT(I,3)*COS(PSI3D)+INPUT(I,4)*SIN(PSI3D)
+      INPUT4=-INPUT(I,3)*SIN(PSI3D)+INPUT(I,4)*COS(PSI3D)
+      INPUT(I,3)=INPUT3 
+      INPUT(I,4)=INPUT4
+
+5237  CONTINUE
+
+	ALPHA3D=(180*ALPHA3D)/(3.141592)
+
+	THETA3D=(180*THETA3D)/(3.141592)
+
+	PSI3D=(180*PSI3D)/(3.141592)
+
+
+C========================================
+C     CALCULA A MEDIA	  APOS ROTAR
+C========================================
+
+	DO 2528 J=1,7
+	SOMA(J)=0.
+	MEDIO(J)=0.
+2528  CONTINUE 
+
+	DO 5531 J=1,7
+	DO 5531 I=XINF,XSUP
+	SOMA(J)=SOMA(J)+INPUT(I,J)
+5531  CONTINUE
+
+	DO 5331 J=1,7
+	MEDIO(J)=SOMA(J)/(FLOAT(GAP))
+5331  CONTINUE
+
+	WRITE(*,786)MEDIO(2),MEDIO(3)
+	WRITE(*,*)
+
+
+C=======================================================================
+C     CALCULA AS COMPONENTES TURBULENTAS DA MATRIZ DE 1Hz
+C=======================================================================
+
+      DO 1110 J=1,7
+      DO 1110 I=XINF,XSUP
+      TURB(I,J)=INPUT(I,J)-MEDIO(J)
+1110  CONTINUE
+
+C=======================================================================
+C     CALCULA O DESVIO PADRAO E A VARIANCA DA MATRIZ DE 1Hz
+C=======================================================================
+
+      DO 1150 J=1,7
+      COR(J)=0.
+1150  CONTINUE
+
+      DO 120 J=1,7
+      DO 120 I=XINF,XSUP
+      COR(J)=COR(J)+(TURB(I,J)**2)
+120   CONTINUE
+
+      DO 1160 J=1,7
+      VAR(J)=COR(J)/(FLOAT(GAP))
+      DP(J)=SQRT(VAR(J))
+1160  CONTINUE
+
+
+C=======================================================================
+C	ESCREVE NO ARQUIVO MEDIASLOW.DAT 
+C=======================================================================
+	MEIO=INT((XINF+XSUP)/2)
+	DHM=INPUT(MEIO,1)
+ 
+	WRITE(15,6)DHM,MEDIO(2),MEDIO(3),MEDIO(4),MEDIO(5),
+	&MEDIO(6),MEDIO(7)
+   
+	WRITE(16,6)DHM,DP(2),DP(3),DP(4),DP(5),DP(6),DP(7)
+
+
+C=====================================================
+C     CALCULA OS PARAMETROS MICROMETEREOLOGICOS
+C=====================================================
+
+
+C=====================================================
+C	CALCULA OS FLUXOS UV UW UT UQ VW VT VQ WT WQ TQ	
+C=====================================================
+
+	DO 738 I=XINF,XSUP
+	UV3D(I)=0.
+	UW3D(I)=0.
+	UT3D(I)=0.
+	UC3D(I)=0.
+	UQ3D(I)=0.
+
+	VW3D(I)=0.
+	VT3D(I)=0.
+	VC3D(I)=0.
+	VQ3D(I)=0.
+
+      WT3D(I)=0.
+	WC3D(I)=0.
+	WQ3D(I)=0.
+
+      TC3D(I)=0.
+	TQ3D(I)=0.
+
+	CQ3D(I)=0.
+
+738	CONTINUE
+
+	DO 765 I=XINF,XSUP
+	UV3D(I)=TURB(I,2)*TURB(I,3)
+	UW3D(I)=TURB(I,2)*TURB(I,4)
+	UT3D(I)=TURB(I,2)*TURB(I,5)
+	UC3D(I)=TURB(I,2)*TURB(I,6)
+	UQ3D(I)=TURB(I,2)*TURB(I,7)
+
+	VW3D(I)=TURB(I,3)*TURB(I,4)
+	VT3D(I)=TURB(I,3)*TURB(I,5)
+	VC3D(I)=TURB(I,3)*TURB(I,6)
+	VQ3D(I)=TURB(I,3)*TURB(I,7)
+
+	WT3D(I)=TURB(I,4)*TURB(I,5)
+	WC3D(I)=TURB(I,4)*TURB(I,6)
+      WQ3D(I)=TURB(I,4)*TURB(I,7)
+
+	TC3D(I)=TURB(I,5)*TURB(I,6)
+	TQ3D(I)=TURB(I,5)*TURB(I,7)
+
+	CQ3D(I)=TURB(I,6)*TURB(I,7)
+
+765	CONTINUE
+
+	SOMAUV3D=0.
+	SOMAUW3D=0.
+	SOMAUT3D=0.
+	SOMAUC3D=0.
+	SOMAUQ3D=0.
+
+	SOMAVW3D=0.
+	SOMAVT3D=0.
+	SOMAVC3D=0.
+	SOMAVQ3D=0.
+
+	SOMAWT3D=0.
+	SOMAWC3D=0.
+	SOMAWQ3D=0.
+
+	SOMATC3D=0.
+	SOMATQ3D=0.
+
+	SOMACQ3D=0.
+			
+	DO 361 I=XINF,XSUP
+	SOMAUV3D=SOMAUV3D+UV3D(I)
+	SOMAUW3D=SOMAUW3D+UW3D(I)
+	SOMAUT3D=SOMAUT3D+UT3D(I)
+	SOMAUC3D=SOMAUC3D+UC3D(I)
+	SOMAUQ3D=SOMAUQ3D+UQ3D(I)
+
+	SOMAVW3D=SOMAVW3D+VW3D(I)
+	SOMAVT3D=SOMAVT3D+VT3D(I)
+	SOMAVC3D=SOMAVC3D+VC3D(I)
+	SOMAVQ3D=SOMAVQ3D+VQ3D(I)
+	
+      SOMAWT3D=SOMAWT3D+WT3D(I)
+      SOMAWC3D=SOMAWC3D+WC3D(I)
+	SOMAWQ3D=SOMAWQ3D+WQ3D(I)
+
+	SOMATC3D=SOMATC3D+TC3D(I)
+	SOMATQ3D=SOMATQ3D+TQ3D(I)
+
+	SOMACQ3D=SOMACQ3D+CQ3D(I)
+361	CONTINUE
+
+	UV3DMEDIO=SOMAUV3D/(FLOAT(GAP))
+	UW3DMEDIO=SOMAUW3D/(FLOAT(GAP))
+	UT3DMEDIO=SOMAUT3D/(FLOAT(GAP))
+	UC3DMEDIO=SOMAUC3D/(FLOAT(GAP))
+	UQ3DMEDIO=SOMAUQ3D/(FLOAT(GAP))
+
+	VW3DMEDIO=SOMAVW3D/(FLOAT(GAP))
+	VT3DMEDIO=SOMAVT3D/(FLOAT(GAP))
+	VC3DMEDIO=SOMAVC3D/(FLOAT(GAP))
+	VQ3DMEDIO=SOMAVQ3D/(FLOAT(GAP))
+	
+      WT3DMEDIO=SOMAWT3D/(FLOAT(GAP))
+	WC3DMEDIO=SOMAWC3D/(FLOAT(GAP))
+	WQ3DMEDIO=SOMAWQ3D/(FLOAT(GAP))
+
+	TC3DMEDIO=SOMATC3D/(FLOAT(GAP))
+      TQ3DMEDIO=SOMATQ3D/(FLOAT(GAP))
+	
+      CQ3DMEDIO=SOMACQ3D/(FLOAT(GAP))
+	
+	CORUV3D=0.
+	CORUW3D=0.
+	CORUT3D=0.
+	CORUC3D=0.
+	CORUQ3D=0.
+
+	CORVW3D=0.
+	CORVT3D=0.
+	CORVC3D=0.
+	CORVQ3D=0.
+	
+      CORWT3D=0.
+	CORWC3D=0.
+	CORWQ3D=0.
+	
+	CORTC3D=0.
+      CORTQ3D=0.
+	
+      CORCQ3D=0.
+
+	DO 720 I=XINF,XSUP
+	CORUV3D=CORUV3D+(UV3D(I)**2)
+	CORUW3D=CORUW3D+(UW3D(I)**2)
+	CORUT3D=CORUT3D+(UT3D(I)**2)
+	CORUC3D=CORUC3D+(UC3D(I)**2)
+	CORUQ3D=CORUQ3D+(UQ3D(I)**2)
+
+	CORVW3D=CORVW3D+(VW3D(I)**2)
+	CORVT3D=CORVT3D+(VT3D(I)**2)
+	CORVC3D=CORVC3D+(VC3D(I)**2)
+	CORVQ3D=CORVQ3D+(VQ3D(I)**2)
+
+	CORWT3D=CORWT3D+(WT3D(I)**2)
+	CORWC3D=CORWC3D+(WC3D(I)**2)
+	CORWQ3D=CORWQ3D+(WQ3D(I)**2)
+
+	CORTC3D=CORTC3D+(TC3D(I)**2)
+	CORTQ3D=CORTQ3D+(TQ3D(I)**2)
+
+	CORCQ3D=CORCQ3D+(CQ3D(I)**2)
+	
+720	CONTINUE
+	
+      VARUV3D=CORUV3D/(FLOAT(GAP))
+      VARUW3D=CORUW3D/(FLOAT(GAP))
+      VARUT3D=CORUT3D/(FLOAT(GAP))
+	VARUC3D=CORUC3D/(FLOAT(GAP))
+      VARUQ3D=CORUQ3D/(FLOAT(GAP))
+
+      VARVW3D=CORVW3D/(FLOAT(GAP))
+      VARVT3D=CORVT3D/(FLOAT(GAP))
+	VARVC3D=CORVC3D/(FLOAT(GAP))
+      VARVQ3D=CORVQ3D/(FLOAT(GAP))
+
+      VARWT3D=CORWT3D/(FLOAT(GAP))
+	VARWC3D=CORWC3D/(FLOAT(GAP))
+      VARWQ3D=CORWQ3D/(FLOAT(GAP))
+
+      VARTC3D=CORTC3D/(FLOAT(GAP))
+	VARTQ3D=CORTQ3D/(FLOAT(GAP))
+
+      VARCQ3D=CORCQ3D/(FLOAT(GAP))
+      
+	
+	DPUV3D=SQRT(VARUV3D)
+	DPUW3D=SQRT(VARUW3D)
+	DPUT3D=SQRT(VARUT3D)
+	DPUC3D=SQRT(VARUC3D)
+	DPUQ3D=SQRT(VARUQ3D)
+
+	DPVW3D=SQRT(VARVW3D)
+	DPVT3D=SQRT(VARVT3D)
+	DPVC3D=SQRT(VARVC3D)
+	DPVQ3D=SQRT(VARVQ3D)
+	
+      DPWT3D=SQRT(VARWT3D)
+	DPWC3D=SQRT(VARWC3D)
+	DPWQ3D=SQRT(VARWQ3D)
+	
+      DPTC3D=SQRT(VARTC3D)
+	DPTQ3D=SQRT(VARTQ3D)
+	
+      DPCQ3D=SQRT(VARCQ3D)
+
+	WRITE(17,9)DHM,UV3DMEDIO,UW3DMEDIO,UT3DMEDIO,UC3DMEDIO,UQ3DMEDIO,
+	&VW3DMEDIO,VT3DMEDIO,VC3DMEDIO,VQ3DMEDIO,WT3DMEDIO,WC3DMEDIO,
+     &WQ3DMEDIO,TC3DMEDIO,TQ3DMEDIO,CQ3DMEDIO
+
+9	FORMAT(F10.6,1X,17F15.5)
+
+	WRITE(18,9)DHM,DPUV3D,DPUW3D,DPUT3D,DPUC3D,DPUQ3D,DPVW3D,DPVT3D,
+	&DPVC3D,DPVQ3D,DPWT3D,DPWC3D,DPWQ3D,DPTC3D,DPTQ3D,DPCQ3D
+
+
+C=====================================================
+C	CALCULA USTAR
+C=====================================================
+
+	USTAR3D=(UW3DMEDIO**2)+(VW3DMEDIO**2)
+
+      USTAR3D=SQRT(SQRT(USTAR3D))
+
+
+C=====================================================
+C	CALCULA ENERGIA CINETICA TURBULENTA
+C=====================================================
+
+      ECT3D1=0.
+      ECT3D2=0.
+      ECT3D3=0.
+
+
+	DO 5005 I=XINF,XSUP
+      ECT3D1=ECT3D1+(TURB(I,2)**2)
+      ECT3D2=ECT3D2+(TURB(I,3)**2)
+      ECT3D3=ECT3D3+(TURB(I,4)**2)
+5005  CONTINUE
+
+      ECT3D1=ECT3D1/(FLOAT(GAP))
+      ECT3D2=ECT3D2/(FLOAT(GAP))
+      ECT3D3=ECT3D3/(FLOAT(GAP))
+
+      ECT3D=0.5*(ECT3D1+ECT3D2+ECT3D3)
+
+C=====================================================
+C	CALCULA O FLUXO DE CALOR SENSIVEL
+C=====================================================
+
+      RHO=1.21
+      CP=1005.
+
+      SEN3D=RHO*CP*WT3DMEDIO
+
+C=====================================================
+C	CALCULA O FLUXO DE CALOR LATENTE
+C=====================================================
+
+      LV=2262.6
+
+      LAT3D=LV*WQ3DMEDIO
+
+C=====================================================
+C	PRINT*,'CALCULANDO TSTAR'
+C=====================================================
+
+      TSTAR3D=-(WT3DMEDIO)/USTAR3D
+
+	QSTAR=WQ3DMEDIO/USTAR3D
+
+
+	T03D=(MEDIO(4)+273)
+
+C=====================================================
+C	CALCULA O COMPRIMENTO DE OBUKHOV
+C=====================================================
+
+      MOL3D=-((USTAR3D**3)*(T03D))/(0.35*9.81*WT3DMEDIO)
+
+C=====================================================
+C	CALCULA A TAXA DE DISSIPACAO TKE (e=u*^3/kz)
+C=====================================================
+
+	EPSON3D=(USTAR3D**3)/(0.35*9)
+
+C=====================================================
+C	CALCULA O WIND SPEED
+C=====================================================
+
+	WIND3D=SQRT((MEDIO(2)**2)+(MEDIO(3)**2))
+
+C=====================================================
+C	ESCREVE NO ARQUIVO PARAMETRO.DAT
+C=====================================================
+
+	WRITE(19,15)DHM,USTAR3D,ECT3D,SEN3D,LAT3D,
+	&TSTAR3D,(9/MOL3D),ALPHA3D,
+     &THETA3D,PSI3D,EPSON3D,WIND3D,QSTAR
+
+15	FORMAT(F10.6,1X,23F15.5)
+
+
+C==============================================
+C     TERMINA AS TAREFAS NO INTERVALO
+C==============================================
+
+	LOCALTIME = CLOCK()
+
+	PRINT*,' FEZ ',K,' FALTAM',LIMITE-K,' TIME ',LOCALTIME
+2	FORMAT(2F12.6)
+
+	XINF=XINF+JUMP
+	XSUP=XSUP+JUMP
+
+11    CONTINUE
+
+	GO TO 8765
+
+8764  CONTINUE
+
+	LOCALTIME = CLOCK()
+
+	WRITE(*,*)
+	WRITE(*,*)'................THE END...................'
+	WRITE(*,*)'.............',LOCALTIME,'..................'
+	WRITE(*,*)
+
+      END
+
+
+
+
+
+
+
+
+
+
+
+
+
+

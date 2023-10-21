@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Fortran Intrinsic Functions</title>
+<meta name="description" content="Fortran Intrinsic Functions - Learn Fortran Programming and how to develop Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<meta name="keywords" content="Fortran, Environment Setup, Basic Syntax, Data Types, Variables, Constants, Operators, Decisions, Loops, Numbers, Characters, Strings, Arrays, Dynamic Arrays, Derived Data Types, Pointers, Basic Input Output, File Input Output, Procedures, Modules, Intrinsic Functions, Numeric Precision, Program Libraries, Programming Style, Debugging Program." />
+<base href="http://www.tutorialspoint.com/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="fb:app_id" content="471319149685276" />
+<meta property="og:site_name" content="www.tutorialspoint.com" />
+<meta name="robots" content="index, follow"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="author" content="tutorialspoint.com">
+<script type="text/javascript" src="/theme/js/script-min-v4.js"></script>
+<link rel="stylesheet" href="/theme/css/style-min.css">
+<!-- Head Libs -->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="/theme/css/ie8.css">
+<![endif]-->
+<style>
+pre.prettyprint.tryit {min-height:37px; background: #eee url(fortran/images/tryit.jpg) top right no-repeat !important}div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, div.footer-copyright { background: #f18901 url(/images/pattern.png) repeat center center !important;}
+.sub-main-menu .sub-menuu div:hover, .sub-main-menu .viewall, header nav ul.nav-main li a:hover, button.btn-responsive-nav, header div.search button.btn-default { background: #f18901 !important;}
+.submenu-item{ border-bottom: 2px solid #f18901 !important; border-top: 2px solid #f18901 !important }
+</style>
+<script>
+$(document).ready(function() {
+  $('input[name="q"]').keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+</script>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="/fortran/images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" class="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" autocomplete="off" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit" onclick="javascript:void(0);"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li> <a href="https://www.tutorialspoint.com/netmeeting.php"><i class="icon-join-meeting"></i> &nbsp;NetMeeting</a> </li>
+            <li> <a href="/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="/articles/index.php"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <li> <a href="/questions_and_answers.htm"><i class="fa fa-question"></i> &nbsp;Quizzes</a> </li>
+            <li class="top-icons" style="display:none;">
+              <ul class="social-icons">
+              <li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+              <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+              <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Twitter">Twitter</a></li>
+              <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+              <li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+              </ul>
+           </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar nav-main">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown no-sub-menu"> <a class="dropdown" href="index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown" id="liTL"><a class="dropdown" href="javascript:void(0);"><span class="tut-lib"> Tutorials Library  <i class="fa-caret-down"></i></span></a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="codingground.htm"><i class="fa-code"></i> Coding Ground </a> </li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.send18.com" target="_blank"><i class="fa fa-send"></i>  Send18</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_file_conversion.htm"><i class="icon icon-refresh"></i>  Conversion</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="online_dev_tools.htm"><span class="dev-tools-menu">  Dev Tools</span></a></li>
+            </ul>
+         </nav>
+         <div class="submenu-item sub-main-menu" id="top-sub-menu"></div>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="/fortran/images/fortran-mini-logo.jpg" alt="Fortran Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">Fortran Tutorial</li>
+<li><a target="_top" href="/fortran/index.htm">Fortran - Home</a></li>
+<li><a target="_top" href="/fortran/fortran_overview.htm">Fortran - Overview</a></li>
+<li><a target="_top" href="/fortran/fortran_environment_setup.htm">Fortran - Environment Setup</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_syntax.htm">Fortran - Basic Syntax</a></li>
+<li><a target="_top" href="/fortran/fortran_data_types.htm">Fortran - Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_variables.htm">Fortran - Variables</a></li>
+<li><a target="_top" href="/fortran/fortran_constants.htm">Fortran - Constants</a></li>
+<li><a target="_top" href="/fortran/fortran_operators.htm">Fortran - Operators</a></li>
+<li><a target="_top" href="/fortran/fortran_decisions.htm">Fortran - Decisions</a></li>
+<li><a target="_top" href="/fortran/fortran_loops.htm">Fortran - Loops</a></li>
+<li><a target="_top" href="/fortran/fortran_numbers.htm">Fortran - Numbers</a></li>
+<li><a target="_top" href="/fortran/fortran_characters.htm">Fortran - Characters</a></li>
+<li><a target="_top" href="/fortran/fortran_strings.htm">Fortran - Strings</a></li>
+<li><a target="_top" href="/fortran/fortran_arrays.htm">Fortran - Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_dynamic_arrays.htm">Fortran - Dynamic Arrays</a></li>
+<li><a target="_top" href="/fortran/fortran_derived_data_types.htm">Fortran - Derived Data Types</a></li>
+<li><a target="_top" href="/fortran/fortran_pointers.htm">Fortran - Pointers</a></li>
+<li><a target="_top" href="/fortran/fortran_basic_input_output.htm">Fortran - Basic Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_file_input_output.htm">Fortran - File Input Output</a></li>
+<li><a target="_top" href="/fortran/fortran_procedures.htm">Fortran - Procedures</a></li>
+<li><a target="_top" href="/fortran/fortran_modules.htm">Fortran - Modules</a></li>
+<li><a target="_top" href="/fortran/fortran_intrinsic_functions.htm">Fortran - Intrinsic Functions</a></li>
+<li><a target="_top" href="/fortran/fortran_numeric_precision.htm">Fortran - Numeric Precision</a></li>
+<li><a target="_top" href="/fortran/fortran_program_libraries.htm">Fortran - Program Libraries</a></li>
+<li><a target="_top" href="/fortran/fortran_programming_style.htm">Fortran - Programming Style</a></li>
+<li><a target="_top" href="/fortran/fortran_debugging_program.htm">Fortran - Debugging Program</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Fortran Resources</li>
+<li><a target="_top" href="/fortran/fortran_quick_guide.htm">Fortran - Quick Guide</a></li>
+<li><a target="_top" href="/fortran/fortran_useful_resources.htm">Fortran - Useful Resources</a></li>
+<li><a target="_top" href="/fortran/fortran_discussion.htm">Fortran - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="/questions_and_answers.htm">Questions and Answers</a></li>
+<li><a target="_top" href="/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="/hr_interview_questions/index.htm">HR Interview Questions</a></li>
+<li><a target="_top" href="/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Fortran - Intrinsic Functions</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js"> 
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_modules.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_numeric_precision.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>Intrinsic functions are some common and important functions that are provided as a part of the Fortran language. We have already discussed some of these functions in the Arrays, Characters and String chapters.</p>
+<p>Intrinsic functions can be categorised as:</p>
+<ul class="list">
+<li>Numeric Functions</li> 
+<li>Mathematical Functions</li> 
+<li>Numeric Inquiry Functions</li> 
+<li>Floating-Point Manipulation Functions</li> 
+<li>Bit Manipulation Functions</li> 
+<li>Character Functions</li> 
+<li>Kind Functions</li> 
+<li>Logical Functions</li> 
+<li>Array Functions.</li> 
+</ul>
+<p>We have discussed the array functions in the Arrays chapter. In the following section we provide brief descriptions of all these functions from other categories.</p>
+<p>In the function name column,</p>
+<ul class="list">
+<li>A represents any type of numeric variable</li>
+<li>R represents a real or integer variable</li>
+<li>X and Y represent real variables</li>
+<li>Z represents complex variable</li>
+<li>W represents real or complex variable</li>
+</ul>
+<h2>Numeric Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th style width="27%">Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>ABS (A)</td>
+<td>It returns the absolute value of A</td>
+</tr>
+<tr>
+<td>AIMAG (Z)</td>
+<td>It returns the imaginary part of a complex number Z</td>
+</tr>
+<tr>
+<td>AINT (A  [, KIND])</td>
+<td>It truncates fractional part of A towards zero, returning a real, whole number.</td>
+</tr>
+<tr>
+<td>ANINT (A [, KIND])</td>
+<td>It returns a real value, the nearest integer or whole number.</td>
+</tr>
+<tr>
+<td>CEILING (A  [, KIND])</td>
+<td>It returns the least integer greater than or equal to number A.</td>
+</tr>
+<tr>
+<td>CMPLX (X [, Y, KIND])</td>
+<td>It converts the real variables X and Y to a complex number X+iY; if Y is absent, 0 is used.</td>
+</tr>
+<tr>
+<td>CONJG (Z)</td>
+<td>It returns the complex conjugate of any complex number Z.</td>
+</tr>
+<tr>
+<td>DBLE (A)</td>
+<td>It converts A to a double precision real number.</td>
+</tr>
+<tr>
+<td>DIM (X, Y)</td>
+<td>It returns the positive difference of X and Y.</td>
+</tr>
+<tr>
+<td>DPROD (X, Y)</td>
+<td>It returns the double precision real product of X and Y.</td>
+</tr>
+<tr>
+<td>FLOOR (A  [, KIND])</td>
+<td>It provides the greatest integer less than or equal to number A.</td>
+</tr>
+<tr>
+<td>INT (A [, KIND])</td>
+<td>It converts a number (real or integer) to integer, truncating the real part towards zero.</td>
+</tr>
+<tr>
+<td>MAX (A1, A2 [, A3,...])</td>
+<td>It returns the maximum value from the arguments, all being of same type.</td>
+</tr>
+<tr>
+<td>MIN (A1, A2 [, A3,...])</td>
+<td>It returns the minimum value from the arguments, all being of same type.</td>
+</tr>
+<tr>
+<td>MOD (A, P)</td>
+<td>It returns the remainder of A on division by P, both arguments  being of the same type (A-INT(A/P)*P)</td>
+</tr>
+<tr>
+<td>MODULO (A, P)</td>
+<td>It returns A modulo P: (A-FLOOR(A/P)*P)</td>
+</tr>
+<tr>
+<td>NINT (A [, KIND])</td>
+<td>It returns the nearest integer of number A</td>
+</tr>
+<tr>
+<td>REAL (A [, KIND])</td>
+<td>It Converts to real type</td>
+</tr>
+<tr>
+<td>SIGN (A, B)</td>
+<td>It returns the absolute value of A multiplied by the sign of P. Basically it transfers the of sign of B to A.</td>
+</tr>
+</table>
+<p><b>Example</b></p>
+<pre class="prettyprint notranslate tryit">
+program numericFunctions
+implicit none  
+
+   ! define constants  
+   ! define variables
+   real :: a, b 
+   complex :: z
+   
+   ! values for a, b 
+   a = 15.2345
+   b = -20.7689
+    
+   write(*,*) 'abs(a): ',abs(a),' abs(b): ',abs(b)   
+   write(*,*) 'aint(a): ',aint(a),' aint(b): ',aint(b) 
+   write(*,*) 'ceiling(a): ',ceiling(a),' ceiling(b): ',ceiling(b)   
+   write(*,*) 'floor(a): ',floor(a),' floor(b): ',floor(b)  
+    
+   z = cmplx(a, b)
+   write(*,*) 'z: ',z   
+   
+end program numericFunctions
+</pre>
+<p>When you compile and execute the above program, it produces the following result:</p>
+<pre class="result notranslate">
+abs(a): 15.2344999   abs(b): 20.7688999    
+aint(a): 15.0000000  aint(b): -20.0000000    
+ceiling(a): 16  ceiling(b): -20
+floor(a): 15  floor(b): -21
+z: (15.2344999, -20.7688999)
+</pre>
+<h2>Mathematical Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>ACOS (X)</td>
+<td>It returns the inverse cosine in the range (0, π), in radians.</td>
+</tr>
+<tr>
+<td>ASIN (X)</td>
+<td>It returns the inverse sine in the range (-π/2, π/2), in radians.</td>
+</tr>
+<tr>
+<td>ATAN (X)</td>
+<td>It returns the inverse tangent in the range (-π/2, π/2), in radians.</td>
+</tr>
+<tr>
+<td>ATAN2 (Y, X)</td>
+<td>It returns the inverse tangent in the range (-π, π), in radians.</td>
+</tr>
+<tr>
+<td>COS (X)</td>
+<td>It returns the cosine of argument in radians.</td>
+</tr>
+<tr>
+<td>COSH (X)</td>
+<td>It returns the hyperbolic cosine of argument in radians.</td>
+</tr>
+<tr>
+<td>EXP (X)</td>
+<td>It returns the exponential value of X.</td>
+</tr>
+<tr>
+<td>LOG (X)</td>
+<td>It returns the natural logarithmic value of X.</td>
+</tr>
+<tr>
+<td>LOG10 (X)</td>
+<td>It returns the common logarithmic (base 10) value of X. </td>
+</tr>
+<tr>
+<td>SIN (X)</td>
+<td>It returns the sine of argument in radians.</td>
+</tr>
+<tr>
+<td>SINH (X)</td>
+<td>It returns the hyperbolic sine of argument in radians.</td>
+</tr>
+<tr>
+<td>SQRT (X)</td>
+<td>It returns square root of X.</td>
+</tr>
+<tr>
+<td>TAN (X)</td>
+<td>It returns the tangent of argument in radians.</td>
+</tr>
+<tr>
+<td>TANH (X)</td>
+<td>It returns the hyperbolic tangent of argument in radians.</td>
+</tr>
+</table>
+<p><b>Example</b></p>
+<p>The following program computes the horizontal and vertical position x and y respectively of a projectile after a time, t:</p>
+<p>Where, x = u t cos a and y = u t sin a - g t2 / 2</p>
+<pre class="prettyprint notranslate tryit">
+program projectileMotion  
+implicit none  
+
+   ! define constants  
+   real, parameter :: g = 9.8  
+   real, parameter :: pi = 3.1415927  
+   
+   !define variables
+   real :: a, t, u, x, y   
+   
+   !values for a, t, and u 
+   a = 45.0
+   t = 20.0
+   u = 10.0
+   
+   ! convert angle to radians  
+   a = a * pi / 180.0  
+   x = u * cos(a) * t   
+   y = u * sin(a) * t - 0.5 * g * t * t  
+   
+   write(*,*) 'x: ',x,'  y: ',y   
+   
+end program projectileMotion
+</pre>
+<p>When you compile and execute the above program, it produces the following result:</p>
+<pre class="result notranslate">
+x: 141.421356  y: -1818.57861  
+</pre>
+<h2>Numeric Inquiry Functions</h2>
+<p>These functions work with a certain model of integer and floating-point arithmetic. The functions return properties of numbers of the same kind as the variable X, which can be real and in some cases integer.</p>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>DIGITS (X)</td>
+<td>It returns the number of significant digits of the model.</td>
+</tr>
+<tr>
+<td>EPSILON (X)</td>
+<td>It returns the number that is almost negligible compared to one. In other words, it returns the smallest value such that REAL( 1.0, KIND(X)) + EPSILON(X) is not equal to REAL( 1.0, KIND(X)).</td>
+</tr>
+<tr>
+<td>HUGE (X)</td>
+<td>It returns the largest number of the model</td>
+</tr>
+<tr>
+<td>MAXEXPONENT (X)</td>
+<td>It returns the maximum exponent of the model</td>
+</tr>
+<tr>
+<td style="width:25%;">MINEXPONENT (X)</td>
+<td>It returns the minimum exponent of the model</td>
+</tr>
+<tr>
+<td>PRECISION (X)</td>
+<td>It returns the decimal precision</td>
+</tr>
+<tr>
+<td>RADIX (X)</td>
+<td>It returns the base of the model</td>
+</tr>
+<tr>
+<td>RANGE (X)</td>
+<td>It returns the decimal exponent range</td>
+</tr>
+<tr>
+<td>TINY (X)</td>
+<td>It returns the smallest positive number of the model</td>
+</tr>
+</table>
+<h2>Floating-Point Manipulation Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>EXPONENT (X)</td>
+<td>It returns the exponent part of a model number</td>
+</tr>
+<tr>
+<td>FRACTION (X)</td>
+<td>It returns the fractional part of a number</td>
+</tr>
+<tr>
+<td>NEAREST (X, S)</td>
+<td>It returns the nearest different processor number in given direction</td>
+</tr>
+<tr>
+<td>RRSPACING (X)</td>
+<td>It returns the reciprocal of the relative spacing of model numbers near given number</td>
+</tr>
+<tr>
+<td>SCALE (X, I)</td>
+<td>It multiplies a real by its base to an integer power</td>
+</tr>
+<tr>
+<td style="width:28%;">SET_EXPONENT (X, I)</td>
+<td>it returns the exponent part of a number</td>
+</tr>
+<tr>
+<td>SPACING (X)</td>
+<td>It returns the absolute spacing of model numbers near given number</td>
+</tr>
+</table>
+<h2>Bit Manipulation Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>BIT_SIZE (I)</td>
+<td>It returns the number of bits of the model</td>
+</tr>
+<tr>
+<td>BTEST (I, POS)</td>
+<td>Bit testing</td>
+</tr>
+<tr>
+<td>IAND (I, J)</td>
+<td>Logical AND</td>
+</tr>
+<tr>
+<td>IBCLR (I, POS)</td>
+<td>Clear bit</td>
+</tr>
+<tr>
+<td>IBITS (I, POS, LEN)</td>
+<td>Bit extraction</td>
+</tr>
+<tr>
+<td>IBSET (I, POS)</td>
+<td>Set bit</td>
+</tr>
+<tr>
+<td>IEOR (I, J)</td>
+<td>Exclusive OR</td>
+</tr>
+<tr>
+<td>IOR (I, J)</td>
+<td>Inclusive OR</td>
+</tr>
+<tr>
+<td>ISHFT (I, SHIFT)</td>
+<td>Logical shift</td>
+</tr>
+<tr>
+<td>ISHFTC (I, SHIFT [, SIZE])</td>
+<td>Circular shift</td>
+</tr>
+<tr>
+<td>NOT (I)</td>
+<td>Logical complement</td>
+</tr>
+</table>
+<h2>Character Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th style width="35%">Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>ACHAR (I)</td>
+<td>It returns the Ith character in the ASCII collating sequence.</td>
+</tr>
+<tr>
+<td>ADJUSTL (STRING)</td>
+<td>It adjusts string left by removing any leading blanks and inserting trailing blanks</td>
+</tr>
+<tr>
+<td>ADJUSTR (STRING)</td>
+<td>It adjusts string right by removing trailing blanks and inserting leading blanks.</td>
+</tr>
+<tr>
+<td>CHAR (I [, KIND])</td>
+<td>It returns the Ith character in the machine speciﬁc collating sequence</td>
+</tr>
+<tr>
+<td>IACHAR (C)</td>
+<td>It returns the position of the character in the ASCII collating sequence.</td>
+</tr>
+<tr>
+<td>ICHAR (C)</td>
+<td>It returns the position of the character in the machine (processor) speciﬁc collating sequence.</td>
+</tr>
+<tr>
+<td style="width:45%;">INDEX (STRING, SUBSTRING [, BACK])</td>
+<td>It returns the leftmost (rightmost if BACK is .TRUE.) starting position of SUBSTRING within STRING.</td>
+</tr>
+<tr>
+<td>LEN (STRING)</td>
+<td>It returns the length of a string.</td>
+</tr>
+<tr>
+<td>LEN_TRIM (STRING)</td>
+<td>It returns the length of a string without trailing blank characters.</td>
+</tr>
+<tr>
+<td>LGE (STRING_A, STRING_B)</td>
+<td>Lexically greater than or equal</td>
+</tr>
+<tr>
+<td>LGT (STRING_A, STRING_B)</td>
+<td>Lexically greater than</td>
+</tr>
+<tr>
+<td>LLE (STRING_A, STRING_B)</td>
+<td>Lexically less than or equal</td>
+</tr>
+<tr>
+<td>LLT (STRING_A, STRING_B)</td>
+<td>Lexically less than</td>
+</tr>
+<tr>
+<td>REPEAT (STRING, NCOPIES)</td>
+<td>Repeated concatenation</td>
+</tr>
+<tr>
+<td>SCAN (STRING, SET [, BACK])</td>
+<td>It returns the index of the leftmost (rightmost if BACK is .TRUE.) character of STRING that belong to SET, or 0 if none belong.</td>
+</tr>
+<tr>
+<td>TRIM (STRING)</td>
+<td>Removes trailing blank characters</td>
+</tr>
+<tr>
+<td>VERIFY (STRING, SET [, BACK])</td>
+<td>Verifies the set of characters in a string</td>
+</tr>
+</table>
+<h2>Kind Functions</h2>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>KIND (X)</td>
+<td>It returns the kind type parameter value.</td>
+</tr>
+<tr>
+<td>SELECTED_INT_KIND (R)</td>
+<td>It returns kind of type parameter for speciﬁed exponent range.</td>
+</tr>
+<tr>
+<td style="width:35%;">SELECTED_REAL_KIND ([P, R])</td>
+<td>Real kind type parameter value, given precision and range</td>
+</tr>
+</table>
+<h2>Logical Function</h2>
+<table class="table table-bordered">
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td style="width:25%;">LOGICAL (L [, KIND])</td>
+<td>Convert between objects of type logical with different kind type parameters</td>
+</tr>
+</table>
+<hr />
+<div class="pre-btn">
+<a href="/fortran/fortran_modules.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="pdf-btn">
+<a href="/fortran/pdf/fortran_intrinsic_functions.pdf" title="Fortran Intrinsic Functions" target="_blank"><i class="icon icon-file-pdf-o big-font"></i> PDF</a>
+</div>
+<div class="nxt-btn">
+<a href="/fortran/fortran_numeric_precision.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+var width = 580;
+var height = 400;
+var format = "580x400_as";
+if( window.innerWidth < 468 ){
+   width = 300;
+   height = 250;
+   format = "300x250_as";
+}
+google_ad_client = "pub-7133395778201029";
+google_ad_width = width;
+google_ad_height = height;
+google_ad_format = format;
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<div class="simple-ad">
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.facebook.com/sharer.php?u=' + 'http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/facebookIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://twitter.com/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/twitterIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://www.linkedin.com/cws/share?url=' + 'http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/linkedinIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('https://plus.google.com/share?url=http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm','sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/googlePlusIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://www.stumbleupon.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=456,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/StumbleUponIcon.jpg" alt="img" />
+</a>
+<a  href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open('http://reddit.com/submit?url=http://www.tutorialspoint.com/fortran/fortran_intrinsic_functions.htm&amp;title='+ document.title,'sharer','toolbar=0,status=0,width=626,height=656,top='+sTop+',left='+sLeft);return false;">
+<img src="/images/reddit.jpg" alt="img" />
+</a>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="index.htm" class="logo"> <img alt="Tutorials Point" class="img-responsive" src="/scripts/img/logo-footer.png"> </a>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <nav id="sub-menu">
+      <ul>
+         <li><a href="/about/tutorials_writing.htm">Write for us</a></li>
+         <li><a href="/about/faq.htm">FAQ's</a></li>
+         <li><a href="/about/about_helping.htm">Helping</a></li>
+         <li><a href="/about/contact_us.htm">Contact</a></li>
+      </ul>
+   </nav>
+</div>
+<div class="col-md-3 col-sm-12 col-xs-12">
+<p>&copy; Copyright 2016. All Rights Reserved.</p>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <div class="news-group">
+      <input type="text" class="form-control-foot search" name="textemail" id="textemail" autocomplete="off" placeholder="Enter email for newsletter" onfocus="if (this.value == 'Enter email for newsletter...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Enter email for newsletter...';}">
+      <span class="input-group-btn"> <button class="btn btn-default btn-footer" id="btnemail" type="submit" onclick="javascript:void(0);">go</button> </span>
+      <div id="newsresponse"></div>
+   </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="/theme/js/custom-min.js"></script>
+<script src="http://www.google-analytics.com/urchin.js">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('fortran/try_fortran.php');
+   tryit.compile();
+</script></div>
+</body>
+</html>

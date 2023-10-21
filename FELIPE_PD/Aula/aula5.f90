@@ -1,0 +1,36 @@
+
+      PROGRAM aula5
+      IMPLICIT NoNE
+
+      REAL C, D, G, P, X, Y
+      INTEGER A, B, I, H, N, M, F, T
+
+      A = 10
+      B = 3
+      C = -0.7
+      D = C
+      F = 8
+      G = 4.3
+      H = -1
+      I = H
+      M = 6
+      N = 3
+      P = 1.8
+      T = 12
+      X = 2.5
+      Y = 1.2
+
+        print*, "a) =", sqrt(P*(P-A)*(P-B)*(P-C))
+        print*, "b) ="
+        print*, "c) ="
+        print*, "d) =" 
+        print*, "e) =" 
+        print*, "f) =" 
+        print*, "g) ="
+        print*, "h) =" 
+        print*, "i) =" 
+        print*, "j) =" 
+        print*, "k) =" 
+        print*, "l) =" 
+
+      END PROGRAM

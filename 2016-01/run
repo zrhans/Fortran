@@ -1,0 +1,5 @@
+#!/bin/bash
+rm a.out
+clear
+gfortran $1
+./a.out

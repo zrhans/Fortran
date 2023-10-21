@@ -1,0 +1,31 @@
+#!/bin/bash
+# FUNCOES
+status()
+{
+	echo " Action: $objeto"
+	echo " Result: $? | 0 = OK else FAILURE"
+return
+}
+
+if [ $# -ne 1 ]; then
+ echo ""; echo "Usage: $0 filename"; echo ""
+ echo " $USER! Digite o nome do arquivo em fortran para compilar."
+ echo " Exemplo: $0 programa.f";echo ""
+ else
+    compilar=`echo $1 | cut -d"." -f1`
+    g77 -o $compilar.x77 $1 subrotinas.f
+    objeto=" compilando $compilar" 
+    status
+    chmod +x $compilar.x77
+    mv $compilar.x77 runSPC/
+#    cd runSPC/
+#    pwd
+#    rm -f S*
+#    ./$compilar.x77
+#    objeto="executando $compilar.x77"
+#    status
+#    pwd
+#    echo "FORTRAN EXECUTADO., CODIGO: $? "
+#    cd ..
+#    pwd
+fi

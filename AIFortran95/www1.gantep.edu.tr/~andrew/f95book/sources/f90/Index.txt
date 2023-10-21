@@ -1,0 +1,183 @@
+===============================
+ INTRODUCTION  TO  FORTRAN  95
+ Bahattin.Kanber@gantep.edu.tr
+  Andrew.Beddall@gantep.edu.tr
+===============================
+
+Index of program sources.
+
+ chapter1/  INTRODUCTION TO PROGRAMMING
+
+            no program source codes.
+
+
+ chapter2/  INTRODUCTION TO FORTRAN
+
+ 2-01a.f90  Examples of valid REAL type variable declarations and assignments.
+ 2-01b.f90  Examples of *invalid* REAL type variable assignments.
+ 2-02a.f90  Examples of valid INTEGER type variable declarations and assignments.
+ 2-02b.f90  Examples of *invalid* INTEGER type variable assignments.
+  2-03.f90  Examples of COMPLEX type variable declarations and assignments.
+ 2-04a.f90  Examples of valid CHARACTER type variable declarations and assignments.
+ 2-04b.f90  Examples of *invalid* CHARACTER type variable assignments.
+ 2-05a.f90  Examples of valid LOGICAL type variable declarations and assignments.
+ 2-05b.f90  Examples of *invalid* LOGICAL type variable assignments.
+ 2-06a.f90  Examples of valid LOGICAL type variable declaration and assignments using relational operators.
+ 2-06b.f90  Examples of *invalid* LOGICAL type variable assignments using relational operators.
+ 2-07a.f90  Example of valid compound logical assignments.
+ 2-07b.f90  Example of *invalid* compound logical assignments.
+  2-08.f90  Inputs a length in feet, converts the length to metres, and outputs the result.
+  2-09.f90  Inputs an angle in degrees, converts the angle to radians...
+  2-10.f90  Inputs an angle in degrees and outputs the sine, cosine and tangent of the angle...
+  2-11.f90  The area of a triangle of sides a, b, c, and inner angles alpha, beta, gamma, is calculated...
+  2-12.f90  Program to evaluate a function of two variables.  
+  2-13.f90  Calculation of the minimum, average, and maximum, values of five temperatures.
+
+
+ chapter3/  CONTROL STATEMENTS
+
+  3-01.f90  Program to input a value of x and output the evaluated function f = x^2 / (x-5).
+  3-02.f90  Computation of the roots of a quadratic equation f(x) = a x^2 + b x + c.
+  3-03.f90  Program to input a value of x and output the evaluated function f = x^2 / (x-5).
+  3-04.f90  A cantilever beam is loaded at its end...
+  3-05.f90  Program to evaluate the composite function:...
+  3-06.f90  A cantilever beam is loaded at position given by the user. 
+  3-07.f90  Grade calculation from the weighted average of three exams. 
+
+
+ chapter4/  REPETITIVE STRUCTURES
+
+  4-01.f90  Summation of the values 28 to 1012 using a DO loop.
+  4-02.f90  The series summation 1 + 2 + 3 + .... + N is performed using a DO loop.
+  4-03.f90  The displacement of a particle is described by the equation...
+  4-04.f90  The resultant magnitude and direction of four forces is computed.
+  4-05.f90  A cantilever beam is loaded at its end...
+  4-06.f90  The function f(x) = SQRT( x**2 + 2 * x ) / ( 2 * x - 5 ) is evaluated...
+  4-07.f90  This program uses a nest loop  to output the products 1x1, 1x2, 1x3, ...., 5x5.
+  4-08.f90  The products of the values in two temperature data sets...named nested DO loops.
+  4-09.f90  The products of the values in two temperature data sets...nested endless DO loops.
+
+
+ chapter5/  I/O AND FILE PROCESSING
+
+  5-01.f90  ...format descriptors for type integer values.
+  5-02.f90  Example of the use of the F formatting descriptor.
+  5-03.f90  Example of the use of the E formatting descriptor.
+  5-04.f90  Example of the use of the ES formatting descriptor.
+  5-05.f90  Example of the use of the EN formatting descriptor.
+  5-06.f90  Example of the use of the A formatting descriptor.
+  5-07.f90  Example of the use of the T formatting descriptor.
+  5-08.f90  Example of the use of the slash (/) descriptor.
+  5-09.f90  Program to illustrate the I descriptor in a READ statement.
+  5-10.f90  Program to illustrate the A descriptor in a READ statement.
+  5-11.f90  Program to illustrate the / descriptor in a READ statement.
+  5-12.f90  The displacement of a particle is described by the equation...
+  5-13.f90  Program to illustrate the general READ statement.
+  5-14.f90  Program to illustrate the input of data from a file...
+  5-15.f90  Program to illustrate the input of data from a file...
+  5-16.f90  Program to read student records from a file...
+  5-17.f90  Program to read a list of prices from a file and output...
+  5-18.f90  Program to read a list of prices from a file and output...
+  inventory.dat    Data for programs 5-17.f90 & 5-18.f90
+  stresses.dat     Data for programs 5-14.f90 & 5-15.f90
+  student.records  Data for programs 5-16.f90
+
+
+ chapter6/  SUBPROGRAMS
+
+  6-01.f90  Program to illustrate the use of an internal function.
+  6-02.f90  ...internal functions for converting Polar coordinates to Cartesian coordinates.
+  6-03.f90  Program to compute the total area of a member composed of N parts.
+  6-04.f90  Program  to illustrate the use of a module function.
+  6-05.f90  ...module functions for converting Polar coordinates to Cartesian coordinates.
+  6-06.f90  Program to compute the total area of a member composed of N parts.
+  6-07.f90  Program to illustrate the use of an implicit external function. 
+  6-08.f90  Program to illustrate the use of an explicit external function.
+  6-09.f90  ...explicit external functions for converting Polar coordinates to Cartesian coordinates.
+  6-10.f90  Program to compute the total area of a member composed of N parts.
+  6-11.f90  ...total surface area and the volume of a cylinder...An internal subroutine is used.
+  6-12.f90  Program to index air pollution values...An internal subroutine is used.
+  6-13.f90  Program to calculate the annual repayment of a loan...Internal subroutines are used.
+  6-14.f90  ...computes the total surface area and the volume of a cylinder...A module subroutine is used.
+  6-15.f90  Program to index air pollution values. A module subroutine is used.
+  6-16.f90  Program to calculate the annual repayment of a loan...Module subroutines are used.
+  6-17.f90  ...total surface area and the volume of a cylinder...An (explicit) external subroutine is used.
+  6-18.f90  Program to index air pollution values...An (explicit) external subroutine is used.
+  6-19.f90  Program to calculate the annual repayment of a loan...(Explicit) external subroutines are used.
+  6-20.f90  Program implementing module functions for converting Polar coordinates to Cartesian coordinates.
+  6-21.f90  Program to compute the factorial of a positive integer. A non-recursive internal subroutine is used.
+  6-22.f90  Program to compute the factorial of a positive integer. A recursive internal subroutine is used.
+  6-23.f90  Program to compute the factorial of a positive integer. A recursive function is used.
+  cylinder.f90       ...total surface area and the volume of a cylinder; requires MODULE Cylinder_Mod.
+  cylinder-mod.f90   Definition of MODULE Cylinder_Mod; requires Constants_Mod.
+  constants-mod.f90  Definition of MODULE Constants_Mod.
+
+
+ chapter7/  ARRAYS
+
+  7-01.f90  Program to demonstrate the declaration and assignment of static arrays.
+  7-02.f90  Subprogram that swaps the contents of two type integer arrays of equal size.
+  7-03.f90  ...the mean and standard deviation...uses a dynamic array.
+  7-04.f90  Program to 'bubble' sort an array of integers into numerical order.
+  7-05.f90  Computer_Accounts
+  7-06.f90  ...reads data from a file into an array using a whole-array READ statement. Requires values.dat
+  7-07.f90  Data representing a set of temperature measurements are assigned to an array...
+  7-08.f90  Data representing a set of temperature measurements are assigned to an array...Dynamic arrays...
+  7-09.f90  Computation of the matrix: A = 2*(B+C) - D...array A is calculated using a nested do-loop.
+
+  values.dat  Data file for program 7-06.f90
+
+   assumed-shape.f90  Example of a function using an assumed-shape array.
+       automatic.f90  Example of a subroutine using automatic arrays.
+  explicit-shape.f90  Example of a function using an explicit-shape array.
+
+
+ chapter8/  OTHER DATA TYPES
+
+  8-01.f90  Example of the declaration and assignment of a  derived data type.
+  8-02.f90  Example of component selection for derived data types.
+  8-03.f90  Account information is processed using a derived data type.
+  8-04.f90  A list of 24 particles from a high energy reaction is input...array structure.
+  8-05.f90  A list of 24 particles from a high energy reaction is input...new data structure is created...
+  8-06.f90  The volume of a regular block is calculated...
+  8-07.f90  Computation of the roots of a quadratic equation f(x) = a x^2 + b x + c
+  8-08.f90  Program write "Hello world!" to a file where the base-name of the file is input by the user.
+  8-09.f90  Program to search for a student in a database...
+
+  particles.dat  Particle list required by program 8-04.f90 and 8-05.f90.
+   students.dat  Student database required by program 8-09.f90.    
+
+
+ chapter9/  POINTERS AND LINKED STRUCTURES
+
+  9-01.f90  Example of pointer assignment.
+  9-02.f90  Example of pointer assignment.
+  9-03.f90  Example of pointer dereference.
+  9-04.f90  Program to illustration pointer association.
+  9-05.f90  Program to illustrate array pointers.
+ 9-06a.f90  Program to illustrate a memory leak.
+ 9-06b.f90  Program to illustrate avoiding a memory leak.
+ 9-07a.f90  Input of N positive integers into an array. A static array is used.
+ 9-07b.f90  Input of N positive integers into an array. N is unknown. Two dynamic arrays are used.
+ 9-07c.f90  Input of N positive integers into a linked structure. N is unknown.
+
+
+ numerical-methods/ APPENDIX D
+
+          cda.f90  ...first derivative of a function f(x) using the  "central-difference approximation" (CDA).
+       circle.f90  Calculation of the area of a circle of unit radius by the Monte-Carlo method.
+        coins.f90  Simulation of the tossing of ten coins.
+       coins2.f90  Simulation of the tossing of many coins.
+         cool.f90  Program to simulate the cooling of a coffee cup assuming Newton's law of cooling.
+        decay.f90  Simulation of the decay of  Molybdenum-99 to Technetium-99m.
+         dice.f90  Simulation of the throwing of ten dice.
+        dice2.f90  Simulation of the throwing of many dice.
+    discharge.f90  Program to simulate the discharge of an R-C circuit.
+ etf-improved.f90  Program to perform numerical integration...using the "Extended Trapezoidal Formula" (ETF).
+          etf.f90  Program to perform numerical integration...using the "Extended Trapezoidal Formula" (ETF).
+   gauss-elim.f90  Gauss Elimination with partial pivoting...solves the matrix equation "a x = y".
+       marble.f90  Program to simulate the motion of a marble falling through oil.
+       mc-int.f90  Monte-Carlo integration of a function.
+           nr.f90  Newton-Raphson iterative formula for finding the roots of a function.
+
+last update 01-01-2005

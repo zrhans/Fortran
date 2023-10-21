@@ -1,0 +1,4 @@
+      PROGRAM aula5
+      IMPLICIT NoNE
+
+      END PROGRAM

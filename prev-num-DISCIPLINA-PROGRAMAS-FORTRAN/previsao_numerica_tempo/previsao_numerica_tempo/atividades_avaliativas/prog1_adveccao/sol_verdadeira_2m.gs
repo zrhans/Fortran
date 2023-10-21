@@ -1,0 +1,6 @@
+'reinit'
+'open sol_verdadeira_2m.ctl'
+'set lon 0 1000'
+*'set t 1 10'
+'d temp'
+'printim solucao_verdadeira_2m.jpg white'

@@ -1,0 +1,14 @@
+#!/bin/bash
+for x in $1
+do
+echo "> procurando inconsistências em: $x..."
+echo "for nan"
+grep -c 'nan' $x
+echo "for *"
+grep -c '*' $x
+echo "for inf"
+grep -c 'inf' $x
+echo "line count"
+wc -l $x
+done
+echo "-----------done !! -------------"

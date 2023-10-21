@@ -1,0 +1,25 @@
+program integer_numbers
+
+implicit none
+
+integer :: i, n
+
+print*, "set a value integer for n"
+
+read*, n
+
+do i = 1, n
+
+if (i == 10) then
+
+stop
+
+end if
+
+print*, i
+
+end do
+
+stop
+
+end program integer_numbers

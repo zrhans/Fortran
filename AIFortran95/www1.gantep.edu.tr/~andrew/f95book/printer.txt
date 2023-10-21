@@ -1,0 +1,18 @@
+An Introduction to FORTRAN 95
+http://www.gazikitabevi.com.tr/kitap.aspx?KitapNo=318
+
+Dr Bahattin Kanber, Dr Andrew Beddall
+http://www1.gantep.edu.tr/~kanber/f95book/
+http://www1.gantep.edu.tr/~andrew/f95book/
+
+ISBN: 975-6009-67-5
+Barcode: 9789756009673
+Language: English
+Pages: 353
+Published: Gazi Kitabevi, 2006
+http://www.gazikitabevi.com.tr/
+Price: 15 YTL
+
+Authors:
+Bahattin.Kanber@gantep.edu.tr
+Andrew.Beddall@gantep.edu.tr 

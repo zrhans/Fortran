@@ -1,0 +1,10 @@
+dset ^solpfrente1h.bin
+options little_endian
+undef 9.999E+20
+xdef 100 linear 360.0 15.5
+ydef  1 linear 180.0 2.5 
+zdef  1 levels 1
+tdef  1000 linear 00Z01jan1998 1hr
+vars 1
+temp   0 0  ** temperatura do ar [graus C]
+ENDVARS
